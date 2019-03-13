@@ -11,6 +11,7 @@
   "author": "DiningHero",
   "license": "",
   "dependencies": {
+    "aes256": "^1.0.4",
     "express": "^4.16.4"
   },
   "devDependencies": {
