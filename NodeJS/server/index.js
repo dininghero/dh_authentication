@@ -1,6 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const port = 3000;
+const crypto = require('crypto');
+const salt = require('./utility/index').salt; /** @function @param {number} length */
+
 /* passwords may be any size since it's SHA256 hashing */
 const aes256 = require('aes256');
 
@@ -18,16 +21,18 @@ app.use(bodyParser.json());
 
 /* "R_A_C" - Restaurant Account Creation */
 app.post('/R_A_C', (req, res) => {
+  let randomString = salt(10);
   let key = 'my passphrase';
   let plaintext = 'my plaintext message'; 
-  let encrypted = aes256.encrypt(key, plaintext);
-  let decrypted = aes256.decrypt(key, encrypted);
+  let encrypted = aes256.encrypt(key + randomString, plaintext);
+  let decrypted = aes256.decrypt(key + randomString, encrypted);
 
   let test_token = {
     key: key,
     plain: plaintext,
     en: encrypted,
     de: decrypted,
+    ss: randomString,
   };
 
   res.status(200).send(test_token);
