@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const port = 3000;
 const crypto = require('crypto');
-const salt = require('./utility/index').salt;
+const { salt, verifyUsername, verifyEmail } = require('./utility/index');
 
 /* SHA256 hashing - passwords may be any size */
 const aes256 = require('aes256');
@@ -14,25 +14,49 @@ const app = express();
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//parse application/json
+// parse application/json
 app.use(bodyParser.json());
 
-//for further streamlining, add parsers to only the routes that need the specific ones / will cut down on the amount of code needing to be run from top to bottom and reduce latency and bottlenecking in high traffic - run tests for this theory
+// for further streamlining, add parsers to only the routes that need the specific ones / will cut down on the amount of code needing to be run from top to bottom and reduce latency and bottlenecking in high traffic - run tests for this theory
 
-/* "R_A_C" - Restaurant Account Creation */
+/* "RAC" - Restaurant Account Creation */
 app.post('/RAC', (req, res) => {
-  let randomString = salt(10);
-  let key = 'my passphrase';
-  let plaintext = 'my plaintext message'; 
-  let encrypted = aes256.encrypt(key + randomString, plaintext);
-  let decrypted = aes256.decrypt(key + randomString, encrypted);
+  /** 
+   * data shape for post request should be as follows 
+   * @param { username: entry, password: entry }
+  */
+  
+  let inputData = req.body;
+  let saltValue = salt(10); /* salt values will be 10 chars in length */
+  let username = req.body.username;
+  let password = req.body.password;
+  let saltedPassword = password + saltValue
+  let mockdata = {test: 'you\'ve been hacked'};
+  let encrypted = aes256.encrypt(saltedPassword, JSON.stringify(mockdata));
+  let decrypted = aes256.decrypt(saltedPassword, encrypted);
 
   let test_token = {
-    key: key,
-    plain: plaintext,
+    user: username,
+    pw: password,
     en: encrypted,
     de: decrypted,
-    ss: randomString,
+    realde: JSON.parse(decrypted),
+    ss: saltValue,
+  };
+
+  // check that username and email are not already in use 
+  // if true, create an account through insert and send 200
+  // if false send response saying something is wrong 
+
+  /* flag determines whether or not there is an error anywhere in the account creation process */
+  let flag = true;
+
+  let checkUser = verifyUsername(req.body.username);
+  let checkEmail = verifyEmail(req.body.email);
+
+  // checking user and email for validity
+  if (!checkUser || !checkEmail) {
+    flag = false;
   };
 
   res.status(200).send(test_token);
