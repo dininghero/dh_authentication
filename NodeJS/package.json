@@ -12,7 +12,8 @@
   "license": "",
   "dependencies": {
     "aes256": "^1.0.4",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "mongoose": "^5.4.19"
   },
   "devDependencies": {
     "eslint": "^5.15.1",
