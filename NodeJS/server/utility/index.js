@@ -11,26 +11,50 @@ const salt = (length) => {
   return crypto.randomBytes(Math.ceil(length/2)).toString('hex').slice(0,length);
 };
 
+// /** 
+//  * verifies username is not in database;
+//  * @function 
+//  * @param {string} username
+//  * @return {boolean}
+// */
+// const verifyUsername = (username) => {
+//   //do query for email in database
+//   let query = null;
+//   if (!query) {
+//     return false;
+//   };
+//   return true;
+// };
+
+// /** 
+//  * verifies email is not in database;
+//  * @function 
+//  * @param {string} email
+//  * @return {boolean}
+// */
+// const verifyEmail = (email) => {
+//   //do query for email in database
+//   let query = null;
+
+// };
+
 /** 
  * verifies username is not in database;
  * @function 
  * @param {string} username
+ * @return {boolean}
 */
-const verifyUsername = (username) => {
-  //self explanatory on function's objective
-};
-
-/** 
- * verifies email is not in database;
- * @function 
- * @param {string} email
-*/
-const verifyEmail = (email) => {
-  //self explanatory on function's objective
+const verifyContent = (searchValue) => {
+  let query = null;
+  if (!query) {
+    return false;
+  };
+  return true;
 };
 
 module.exports = {
   salt,
-  verifyUsername,
-  verifyEmail,
+  verifyContent,
+  // verifyUsername,
+  // verifyEmail,
 };
