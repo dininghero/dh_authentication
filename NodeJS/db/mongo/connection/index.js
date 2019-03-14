@@ -10,32 +10,44 @@ const options = {
 
 const db = mongoose.connection;
 
-// Create the database connection
+/**
+  * Create MongoDB connection and log connection events
+  * @name connection
+  * @function
+  */
 const connection = () => {
   mongoose.connect(dbURL, options);
 
-  // Connection Events:
+  db.on('connecting', () => console.log(`MongoDB is connecting: ${dbURL}`));
 
-  db.on('connecting', () => console.log(`mongodb is connecting: ${dbURL}`));
+  db.on('connected', () => console.log(`MongoDB is connected: ${dbURL}`));
 
-  db.on('connected', () => console.log(`mongodb is connected: ${dbURL}`));
+  db.on('error', err => console.log(`MongoDB error: ${err}`));
 
-  db.on('error', err => console.log(`mongodb error: ${err}`));
+  db.on('disconnecting', () => console.log('MongoDB is disconnecting!'));
 
-  db.on('disconnecting', () => console.log('mongodb is disconnecting!'));
+  db.on('disconnected', () => console.log('MongoDB is disconnected!'));
 
-  db.on('disconnected', () => console.log('mongodb is disconnected!'));
+  db.on('reconnected', () => console.log(`MongoDB is reconnected: ${dbURL}`));
 
-  db.on('reconnected', () => console.log(`mongodb is reconnected: ${dbURL}`));
+  db.on('reconnectFailed', () => console.log('MongoDB reconnected failed, run out of reconnectTries'));
 
-  db.on('reconnectFailed', () => console.log('mongodb reconnected failed, run out of reconnectTries'));
+  db.on('timeout', err => console.log(`MongoDB timeout: ${err}`));
 
-  db.on('timeout', err => console.log(`mongodb timeout: ${err}`));
-
-  db.on('close', () => console.log('mongodb connection closed'));
+  db.on('close', () => console.log('MongoDB connection closed'));
 };
 
-const close = () => db.close();
+/**
+ * Close the MongoDB connection
+ * @name close
+ * @function
+ */
+const close = () => {
+  db.close(() => {
+    console.log('MongoDB disconnected on app termination');
+    process.exit(0);
+  });
+};
 
 module.exports = {
   connection,
