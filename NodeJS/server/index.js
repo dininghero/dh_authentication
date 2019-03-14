@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const port = 3000;
 const crypto = require('crypto');
-const { salt, verifyUsername, verifyEmail } = require('./utility/index');
+const { salt, verifyContent } = require('./utility/index');
 
 /* SHA256 hashing - passwords may be any size */
 const aes256 = require('aes256');
