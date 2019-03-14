@@ -59,6 +59,11 @@ app.post('/RAC', (req, res) => {
     flag = false;
   };
 
+  // verify flag boolean 
+  if (!flag) {
+    res.status(404).send('IN_USE');
+  };
+
   res.status(200).send(test_token);
 });
 
