@@ -4,6 +4,7 @@ const crypto = require('crypto');
  * generates random string of characters i.e salt
  * @function
  * @param {number} length - Length of the random string.
+ * @return {string}
  */
  /** convert to hexadecimal format */
  /** return required number of characters */
