@@ -1,7 +1,7 @@
 const Account = require('../schema');
 
 /**
-  * Create a new user account
+  * Create a new account
   * @name createAccount
   * @function
   * @param {Object} user - User account schema
@@ -9,43 +9,47 @@ const Account = require('../schema');
   * @param {String} user.restauramt -  Account restaurant name
   * @param {String} user.pw - Account hashed password
   * @param {String} user.date - Account creation date
-  * @param {String} user.id - Account unique id
   */
 const createAccount = user => Account.create(user);
 
 /**
-  * Update a user password
-  * @name updatePw
+  * Update an account password, email or restaurant name
+  * @name updateAccount
   * @function
   * @param {String} id - Account unique id
-  * @param {String} pw - Account new hashed password
-  * @param {requestCallback} cb - The callback that handles the response
+  * @param {Object} newData - Account data to update
+  * @param {String} newData.key - newData.pw || newData.email || newData.restaurant
+  * @param {requestCallback} cb - Callback that handles the response
   */
-const updatePw = (id, pw, cb) => Account.findByIdAndUpdate(id, { pw }, cb);
+const updateAccount = (id, newData, cb) => Account.findByIdAndUpdate(id, newData, cb);
 
 /**
-  * Update a user email
-  * @name updateEmail
+  * Check an account email or restaurant name
+  * @name checkAccount
   * @function
-  * @param {String} id - Account unique id
-  * @param {String} email - Account new email
-  * @param {requestCallback} cb - The callback that handles the response
+  * @param {Object} information - Information to find
+  * @param {String} information.key - information.email || information.restaurant
+  * @param {requestCallback} cb - Callback that handles the response
   */
-const updateEmail = (id, email, cb) => Account.findByIdAndUpdate(id, { email }, cb);
+const checkAccount = (information, cb) => Account.findOne(information, cb);
 
 /**
-  * Update a user restaurant name
-  * @name updateRestaurant
+  * Retreive an account based on email and pw
+  * @name loginAccount
   * @function
-  * @param {String} id - Account unique id
-  * @param {String} restaurant - Account new restaurant name
-  * @param {requestCallback} cb - The callback that handles the response
+  * @param {Object} loginData - Login information
+  * @param {String} loginData.email - login email
+  * @param {String} loginData.pw - login password
+  * @param {requestCallback} cb - Callback that handles the response
   */
-const updateRestaurant = (id, restaurant, cb) => Account.findByIdAndUpdate(id, { restaurant }, cb);
+const loginAccount = (
+  loginData,
+  cb,
+) => Account.find({ email: loginData.email, pw: loginData.pw }, cb);
 
 module.exports = {
   createAccount,
-  updatePw,
-  updateEmail,
-  updateRestaurant,
+  updateAccount,
+  checkAccount,
+  loginAccount,
 };

@@ -1,12 +1,5 @@
 const mongoose = require('mongoose');
 
-// const { connection, close } = require('../connection');
-
-// connection();
-
-// This event is fired when the Node.js process receives termination signal
-// process.on('SIGINT', close).on('SIGTERM', close);
-
 const accountSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -20,13 +13,9 @@ const accountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  date: {
+  createdAt: {
     type: Date,
     default: Date.now,
-  },
-  id: {
-    type: String,
-    required: true,
   },
 });
 
