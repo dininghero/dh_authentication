@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const port = 3000;
+const { connect }  = require('../db/mongo/connections/index');
 const crypto = require('crypto');
 const { salt, verifyContent } = require('./utility/index');
 
@@ -49,22 +50,18 @@ app.post('/RAC', (req, res) => {
   // if false send response saying something is wrong 
 
   /* flag determines whether or not there is an error anywhere in the account creation process */
-  let flag = true;
+  let accountVerification = verifyContent(req.body);
 
-  let checkUser = verifyUsername(req.body.username);
-  let checkEmail = verifyEmail(req.body.email);
-
-  // checking user and email for validity
-  if (!checkUser || !checkEmail) {
-    flag = false;
-  };
-
-  // verify flag boolean 
-  if (!flag) {
-    res.status(404).send('IN_USE');
+  /* checks returned token for any false values and if there are, sends 200 */
+  if (!accountVerification.email || !accountVerification.restaurant) {
+    res.status(200).send(accountVerification);
   };
 
   res.status(200).send(test_token);
 });
 
-app.listen(port, () => console.log(`*** app listening on http://localhost:${port}/ ***`));
+const listen = () => app.listen(port, () => console.log(`*** app listening on http://localhost:${port}/ ***`));
+
+/** creates connection to MongoDb and when connection is established, starts server  */
+
+connect(listen);

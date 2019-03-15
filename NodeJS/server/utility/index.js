@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-
+const { checkAccount } = require('../../db/mongo/models');
 /**
  * generates random string of characters i.e salt
  * @function
@@ -12,50 +12,37 @@ const salt = (length) => {
   return crypto.randomBytes(Math.ceil(length/2)).toString('hex').slice(0,length);
 };
 
-// /** 
-//  * verifies username is not in database;
-//  * @function 
-//  * @param {string} username
-//  * @return {boolean}
-// */
-// const verifyUsername = (username) => {
-//   //do query for email in database
-//   let query = null;
-//   if (!query) {
-//     return false;
-//   };
-//   return true;
-// };
-
-// /** 
-//  * verifies email is not in database;
-//  * @function 
-//  * @param {string} email
-//  * @return {boolean}
-// */
-// const verifyEmail = (email) => {
-//   //do query for email in database
-//   let query = null;
-
-// };
-
 /** 
  * verifies username is not in database;
  * @function 
- * @param {string} username
+ * @param {string} searchValue
+ * @param {string} searchValue
  * @return {boolean}
 */
+
 const verifyContent = (searchValue) => {
-  let query = null;
-  if (!query) {
-    return false;
+  /** verification token for email and restaurants -- false == in use  */
+  let ERVerification = {
+    email: true,
+    restaurant: true,
   };
-  return true;
+
+  //query will async
+  let emailQuery = checkAccount({email: searchValue.email})
+  let restaurantQuery = checkAccount({restaurant: searchValue.restaurant}); // {email: name} {restaurant: name};
+
+  if (!emailQuery) {
+    ERVerification.email = false;
+  };
+
+  if (!restaurantQuery) {
+    ERVerification.restaurant = false;
+  };
+
+  return ERVerification;
 };
 
 module.exports = {
   salt,
   verifyContent,
-  // verifyUsername,
-  // verifyEmail,
 };
