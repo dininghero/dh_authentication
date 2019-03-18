@@ -36,17 +36,18 @@ app.post('/RAC', (req, res) => {
     } else {
       let saltValue = salt(10); /* salt values will be 10 chars in length */
       let saltedPassword = req.body.pw + saltValue;
-
+      let encryptedPassword =  aes256.encrypt(saltedPassword, JSON.stringify(req.body));
+      console.log(encryptedPassword);
       /** input value */
       let newUser = {
         restaurant: req.body.restaurant,
-        pw: aes256.encrypt(saltedPassword, JSON.stringify(req.body)),
+        pw: encryptedPassword,
         salt: saltValue,
         email: req.body.email, 
       };
 
       /** insert entry into database */
-      createAccount(req.body);
+      createAccount(newUser);
       res.status(200).send('Success!');
     };
   }).catch(error => {
