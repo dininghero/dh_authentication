@@ -4,6 +4,7 @@ const port = 3000;
 const { connect }  = require('../db/mongo/connections/index');
 const crypto = require('crypto');
 const { salt, verifyContent } = require('./utility/index');
+const { createAccount } =  require('../db/mongo/models/index');
 
 /* SHA256 hashing - passwords may be any size */
 const aes256 = require('aes256');
@@ -22,42 +23,35 @@ app.use(bodyParser.json());
 
 /* "RAC" - Restaurant Account Creation */
 app.post('/RAC', (req, res) => {
-  /** 
-   * data shape for post request should be as follows 
-   * @param { username: entry, password: entry }
-  */
-  
-  let inputData = req.body;
-  let saltValue = salt(10); /* salt values will be 10 chars in length */
-  let username = req.body.username;
-  let password = req.body.password;
-  let saltedPassword = password + saltValue
-  let mockdata = {test: 'you\'ve been hacked'};
-  let encrypted = aes256.encrypt(saltedPassword, JSON.stringify(mockdata));
-  let decrypted = aes256.decrypt(saltedPassword, encrypted);
+  // let decrypted = aes256.decrypt(saltedPassword, encrypted);
 
-  let test_token = {
-    user: username,
-    pw: password,
-    en: encrypted,
-    de: decrypted,
-    realde: JSON.parse(decrypted),
-    ss: saltValue,
-  };
+  // /* flag determines whether or not there is an error anywhere in the account creation process */
+  let accountVerification = new Promise ((resolve, reject) => {
+    let checkEntry = verifyContent(req.body);
+    resolve(checkEntry);
+  }).then(result => {
+    /* checks returned token for any false values and if there are, sends 200 */
+    if (!result.email || !result.restaurant) {
+      res.status(200).send(result);
+    } else {
+      let saltValue = salt(10); /* salt values will be 10 chars in length */
+      let saltedPassword = req.body.pw + saltValue;
 
-  // check that username and email are not already in use 
-  // if true, create an account through insert and send 200
-  // if false send response saying something is wrong 
+      /** input value */
+      let newUser = {
+        restaurant: req.body.restaurant,
+        pw: aes256.encrypt(saltedPassword, JSON.stringify(req.body)),
+        salt: saltValue,
+        email: req.body.email, 
+      };
 
-  /* flag determines whether or not there is an error anywhere in the account creation process */
-  let accountVerification = verifyContent(req.body);
-
-  /* checks returned token for any false values and if there are, sends 200 */
-  if (!accountVerification.email || !accountVerification.restaurant) {
-    res.status(200).send(accountVerification);
-  };
-
-  res.status(200).send(test_token);
+      /** insert entry into database */
+      createAccount(req.body);
+      res.status(200).send('Success!');
+    };
+  }).catch(error => {
+    console.log(error);
+  });
 });
 
 const listen = () => app.listen(port, () => console.log(`*** app listening on http://localhost:${port}/ ***`));

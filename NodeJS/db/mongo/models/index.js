@@ -6,8 +6,9 @@ const Account = require('../schema');
   * @function
   * @param {Object} user - User account schema
   * @param {String} user.email - Account email
-  * @param {String} user.restauramt -  Account restaurant name
+  * @param {String} user.restaurant -  Account restaurant name
   * @param {String} user.pw - Account hashed password
+  * @param {String} user.salt - Salt value added to the password before hashing
   * @param {String} user.date - Account creation date
   */
 const createAccount = user => Account.create(user);

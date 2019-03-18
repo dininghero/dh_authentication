@@ -17,7 +17,7 @@ const salt = (length) => {
  * @function 
  * @param {string} searchValue
  * @param {string} searchValue
- * @return {boolean}
+ * @return {object} - object structure - {email: name@email.com, restaurant: restaurant}
 */
 
 const verifyContent = (searchValue) => {
@@ -27,19 +27,30 @@ const verifyContent = (searchValue) => {
     restaurant: true,
   };
 
-  //query will async
-  let emailQuery = checkAccount({email: searchValue.email})
-  let restaurantQuery = checkAccount({restaurant: searchValue.restaurant}); // {email: name} {restaurant: name};
+  /** List of promises to verify email and restaurant uniqueness */
 
-  if (!emailQuery) {
-    ERVerification.email = false;
-  };
+  let emailQuery = new Promise((resolve, reject) => {
+    let query = checkAccount({email: searchValue.email});
+    resolve(query);
+  });
 
-  if (!restaurantQuery) {
-    ERVerification.restaurant = false;
-  };
+  let restaurantQuery = new Promise((resolve, reject) => {
+    let query = checkAccount({restaurant: searchValue.restaurant});
+    resolve(query);
+  });
 
-  return ERVerification;
+  let PromiseArray = Promise.all([emailQuery, restaurantQuery]).then(result => {
+    if (result[0] !== null) {
+      ERVerification.email = false;
+    };
+    if (result[1] !== null) {
+      ERVerification.restaurant = false;
+    }
+    return ERVerification;
+  }).catch(error => {
+    console.log(error);
+  })
+  return PromiseArray;
 };
 
 module.exports = {
