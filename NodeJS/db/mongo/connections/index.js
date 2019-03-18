@@ -4,6 +4,7 @@ const dbURL = 'mongodb://localhost:27017/dininghero';
 
 const options = {
   useNewUrlParser: true,
+  useCreateIndex: true,
   reconnectTries: 60,
   reconnectInterval: 1000,
 };
