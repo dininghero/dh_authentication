@@ -13,6 +13,10 @@ const accountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  salt: {
+    type: String,
+    require: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
