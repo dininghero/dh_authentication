@@ -1,7 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
 
-const { salt, verifyContent, verifyPassword, encryption, decryption } = require('./utility/index');
+const { verifyContent, verifyPassword, encryption, decryption } = require('./utility/index');
 const { connect } = require('../db/mongo/connections/index');
 const { createAccount, loginAccount } = require('../db/mongo/models/index');
 
@@ -20,18 +20,24 @@ app.use(express.json());
 // ones / will cut down on the amount of code needing to be run from top to bottom
 // and reduce latency and bottlenecking in high traffic - run tests for this theory
 
-/* "RAL" - Restaurant Account Log-in */
-app.get('/RAL', (req, res) => {
-  return new Promise ((resolve, reject) => {
-    let verification = verifyPassword(req.body);
-    resolve(verification);
-  }).then(result => {
-    if (typeof result !== 'string') {
-      res.status(200).send('some of sort CSRF token/cookie');
-    } else {
-      res.status(200).send('Log-in unsuccessful. Check email or password.');
-    }
-  })
+/** 
+ * Restaurant Account Log-in 
+ * URL: '/rac'
+ * Method: GET
+ */
+app.get('/ral', (req, res) => {
+  verifyPassword(req.body)
+    .then(result => {
+      if (typeof result !== 'string') {
+        res.status(200).send({
+          response: 'some of sort CSRF token/cookie'
+        });
+      } else {
+        res.status(400).send({
+          response:'Log-in unsuccessful. Check email or password.'
+        });
+      }
+    })
 });
 
 /**
@@ -41,9 +47,8 @@ app.get('/RAL', (req, res) => {
   * Data Params: { email: [string], pw: [string], restaurant: [string] }
   */
 app.post('/rac', (req, res) => {
-  // const decrypted = aes256.decrypt(saltedPassword, encrypted);
   verifyContent(req.body)
-    .then((result) => {
+    .then(result => {
       /* Checks returned token for any false values and if there are, send 409 conflit */
       if (!result.email || !result.restaurant) {
         if (!result.restaurant && !result.email) {
@@ -61,15 +66,13 @@ app.post('/rac', (req, res) => {
         }
       } else {
         /* Else encrypt password and create a new account */
-        const saltValue = salt(16); /* salt values will be 16 bytes - 128 bit */
-        const saltedPassword = req.body.pw + saltValue;
-        const encrypted = encryption(saltedPassword, req.body.pw);
+        const encrypted = encryption(req.body.pw);
 
-        /* Input value */
+        /* Token for database entry */
         const newUser = {
           restaurant: req.body.restaurant,
-          pw: encrypted,
-          salt: saltValue,
+          pw: encrypted.hash,
+          salt: encrypted.salt,
           email: req.body.email,
         };
 
@@ -81,7 +84,7 @@ app.post('/rac', (req, res) => {
             });
           })
           .catch((err) => {
-            res.status(500).send({
+            res.status(400).send({
               response: 'Couldn\'t create account',
               error: err.message,
             });
@@ -89,7 +92,7 @@ app.post('/rac', (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(500).send({
+      res.status(400).send({
         response: 'Couldn\'t create account',
         error: err.message,
       });
