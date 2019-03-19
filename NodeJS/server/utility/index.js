@@ -3,49 +3,45 @@ const crypto = require('crypto');
 const { checkAccount, loginAccount } = require('../../db/mongo/models');
 
 /**
-  * Generates random string of characters i.e salt
-  * @name salt
-  * @function
-  * @param {Number} length - Length of the random string
-  * @return {String} Return required number of characters
-  */
-const salt = (length) => {
-  return crypto
+ * Class for salting, encrypting, and decrypting user passwords for authentication
+ * @name _crypto
+ * @function
+ * @constructor
+ * @method salt
+ * @param {Number} length - Length of the random string
+ * @method encryption
+ * @param {String} - user password
+ * @method decryption
+ * @param {String} - user password
+ * @param {String} - stored salt value
+ */
+const _crypto = class Crypto {
+  constructor() {
+  }
+
+  salt(length) {
+    return crypto
     .randomBytes(Math.ceil(length / 2))
     .toString('hex') // Convert to hexadecimal format
     .slice(0, length);
-};
+  }
 
-/**
-  * Generates Hash Key in place of user password with the use of SHA256 since there are few advantages to using SHA392 and SHA512
-  * @name encryption
-  * @function
-  * @param {String} password - password
-  * @return {String}
-  */
-const encryption = (password) => {
-  const algorithm = 'sha256';
-  const _salt = salt(16);
-  const hash = crypto.pbkdf2Sync(password, _salt, 1000, 64, algorithm).toString('hex');
-  const token = {
-    hash,
-    salt: _salt
-  };
-  return token;
-};
+  encryption(password) {
+    const algorithm = 'sha256';
+    const _salt = this.salt(16);
+    const hash = crypto.pbkdf2Sync(password, _salt, 1000, 64, algorithm).toString('hex');
+    const token = {
+      hash,
+      salt: _salt
+    };
+    return token;
+  }
 
-/**
-  * Generates Hash Key using stored salt value
-  * @name decryption
-  * @function
-  * @param {String} password - password
-  * @param {String} salt - salt value generated when account was created
-  * @return {String}
-  */
-const decryption = (password, salt) => {
-  const algorithm = 'sha256';
-  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, algorithm).toString('hex');
-  return hash;
+  decryption(password, salt) {
+    const algorithm = 'sha256';
+    const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, algorithm).toString('hex');
+    return hash;
+  }
 };
 
 /**
@@ -96,8 +92,10 @@ const verifyPassword = (credentials) => {
   }).then((result) => {
     return result[0];
   }).then((result) => {
-    const decrypt = decryption(credentials.pw, result.salt);
-    if (decrypt === result.pw) {
+    // const decrypt = decryption(credentials.pw, result.salt);
+    const decrypt = new _crypto(credentials.pw);
+    // if (decrypt === result.pw) {
+    if (decrypt.decryption(credentials.pw, result.salt) === result.pw) {
       return result;
     } else {
       return 'FAILED';
@@ -106,9 +104,7 @@ const verifyPassword = (credentials) => {
 };
 
 module.exports = {
-  salt,
   verifyContent,
   verifyPassword,
-  encryption,
-  decryption,
+  _crypto,
 };
