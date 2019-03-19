@@ -1,6 +1,6 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const crypto = require('crypto');
+
 const { salt, verifyContent, verifyPassword, encryption, decryption } = require('./utility/index');
 const { connect } = require('../db/mongo/connections/index');
 const { createAccount, loginAccount } = require('../db/mongo/models/index');
@@ -10,19 +10,17 @@ const app = express();
 
 /* Middleware */
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+// Parse application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: false }));
 
-// parse application/json
-app.use(bodyParser.json());
+// Parse application/json
+app.use(express.json());
 
-/*
-* for further streamlining, add parsers to only the routes that need the specific
-* ones / will cut down on the amount of code needing to be run from top to bottom
-* and reduce latency and bottlenecking in high traffic - run tests for this theory
-*/
+// For further streamlining, add parsers to only the routes that need the specific
+// ones / will cut down on the amount of code needing to be run from top to bottom
+// and reduce latency and bottlenecking in high traffic - run tests for this theory
 
-/* "RAL" - Restaurant Account Log-in */ 
+/* "RAL" - Restaurant Account Log-in */
 app.get('/RAL', (req, res) => {
   return new Promise ((resolve, reject) => {
     let verification = verifyPassword(req.body);
@@ -36,38 +34,71 @@ app.get('/RAL', (req, res) => {
   })
 });
 
-/* "RAC" - Restaurant Account Creation */
-app.post('/RAC', (req, res) => {
-  return new Promise((resolve, reject) => {
-    const checkEntry = verifyContent(req.body);
-    resolve(checkEntry);
-  }).then((result) => {
-    /* checks returned token for any false values and if there are, sends 200 */
-    if (!result.email || !result.restaurant) {
-      res.status(200).send(result);
-    } else {
-      const saltValue = salt(16); /* salt values will be 16 bytes - 128 bit*/
-      const saltedPassword = req.body.pw + saltValue;
-      const encrypted = encryption(saltedPassword, req.body.pw);
+/**
+  * Restaurant Account Creation
+  * URL: '/rac'
+  * Method: POST
+  * Data Params: { email: [string], pw: [string], restaurant: [string] }
+  */
+app.post('/rac', (req, res) => {
+  // const decrypted = aes256.decrypt(saltedPassword, encrypted);
+  verifyContent(req.body)
+    .then((result) => {
+      /* Checks returned token for any false values and if there are, send 409 conflit */
+      if (!result.email || !result.restaurant) {
+        if (!result.restaurant && !result.email) {
+          res.status(409).send({
+            response: 'Email and restaurant already exist',
+          });
+        } else if (!result.email) {
+          res.status(409).send({
+            response: 'Email already exist',
+          });
+        } else {
+          res.status(409).send({
+            response: 'Restaurant already exist',
+          });
+        }
+      } else {
+        /* Else encrypt password and create a new account */
+        const saltValue = salt(16); /* salt values will be 16 bytes - 128 bit */
+        const saltedPassword = req.body.pw + saltValue;
+        const encrypted = encryption(saltedPassword, req.body.pw);
 
-      /** input value */
-      const newUser = {
-        restaurant: req.body.restaurant,
-        pw: encrypted,
-        salt: saltValue,
-        email: req.body.email,
-      };
+        /* Input value */
+        const newUser = {
+          restaurant: req.body.restaurant,
+          pw: encrypted,
+          salt: saltValue,
+          email: req.body.email,
+        };
 
-      /** insert entry into database */
-      createAccount(newUser);
-      res.status(200).send('Success!');
-    }
-  }).catch((error) => {
-    console.log(error);
-  });
+        /* Insert entry into database */
+        createAccount(newUser)
+          .then(() => {
+            res.status(201).send({
+              response: 'Account created',
+            });
+          })
+          .catch((err) => {
+            res.status(500).send({
+              response: 'Couldn\'t create account',
+              error: err.message,
+            });
+          });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        response: 'Couldn\'t create account',
+        error: err.message,
+      });
+    });
 });
 
-const listen = () => app.listen(port, () => console.log(`*** app listening on http://localhost:${port}/ ***`));
+/* Creates connection to MongoDb and when connection is established, starts server */
+const listen = () => app.listen(port, () => {
+  console.log(`*** app listening on http://localhost:${port}/ ***`);
+});
 
-/** creates connection to MongoDb and when connection is established, starts server  */
 connect(listen);
