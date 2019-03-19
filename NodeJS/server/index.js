@@ -1,12 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
-/* SHA256 hashing - passwords may be any size */
-const aes256 = require('aes256');
-
-const { salt, verifyContent } = require('./utility/index');
+const { salt, verifyContent, verifyPassword, encryption, decryption } = require('./utility/index');
 const { connect } = require('../db/mongo/connections/index');
-const { createAccount } = require('../db/mongo/models/index');
+const { createAccount, loginAccount } = require('../db/mongo/models/index');
 
 const port = 3000;
 const app = express();
@@ -25,11 +22,24 @@ app.use(bodyParser.json());
 * and reduce latency and bottlenecking in high traffic - run tests for this theory
 */
 
+/* "RAL" - Restaurant Account Log-in */ 
+app.get('/RAL', (req, res) => {
+  return new Promise ((resolve, reject) => {
+    let test = verifyPassword(req.body);
+    resolve(test);
+  }).then(result => {
+    console.log('hi', result);
+    if (typeof result !== 'string') {
+      res.status(200).send('some of sort CSRF token/cookie');
+    } else {
+      res.status(200).send('Log-in unsuccessful. Check email or password.');
+    }
+  })
+  // res.status(200).send('hit');
+})
+
 /* "RAC" - Restaurant Account Creation */
 app.post('/RAC', (req, res) => {
-  // let decrypted = aes256.decrypt(saltedPassword, encrypted);
-
-  /* flag determines whether or not there is an error anywhere in the account creation process */
   return new Promise((resolve, reject) => {
     const checkEntry = verifyContent(req.body);
     resolve(checkEntry);
@@ -38,15 +48,14 @@ app.post('/RAC', (req, res) => {
     if (!result.email || !result.restaurant) {
       res.status(200).send(result);
     } else {
-      const saltValue = salt(10); /* salt values will be 10 chars in length */
+      const saltValue = salt(16); /* salt values will be 16 bytes - 128 bit*/
       const saltedPassword = req.body.pw + saltValue;
-      const encryptedPassword = aes256.encrypt(saltedPassword, JSON.stringify(req.body));
-      console.log(encryptedPassword);
+      const encrypted = encryption(saltedPassword, req.body.pw);
 
       /** input value */
       const newUser = {
         restaurant: req.body.restaurant,
-        pw: encryptedPassword,
+        pw: encrypted,
         salt: saltValue,
         email: req.body.email,
       };
