@@ -1,11 +1,11 @@
 ## Requirements
 
 ``
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 ``
 
 ## Run the development server
 
 ``
-$ python server/index.py
+$ python3 server/index.py
 ``

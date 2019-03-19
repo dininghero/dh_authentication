@@ -1,6 +1,6 @@
-import flask
+from flask import Flask
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 # Creates the Flask application object, which contains data about the application
 # and also methods (object functions) that tell the application to do certain actions.
 
