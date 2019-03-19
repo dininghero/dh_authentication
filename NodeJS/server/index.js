@@ -20,18 +20,24 @@ app.use(express.json());
 // ones / will cut down on the amount of code needing to be run from top to bottom
 // and reduce latency and bottlenecking in high traffic - run tests for this theory
 
-/* "RAL" - Restaurant Account Log-in */
-app.get('/RAL', (req, res) => {
-  return new Promise ((resolve, reject) => {
-    let verification = verifyPassword(req.body);
-    resolve(verification);
-  }).then(result => {
-    if (typeof result !== 'string') {
-      res.status(200).send('some of sort CSRF token/cookie');
-    } else {
-      res.status(200).send('Log-in unsuccessful. Check email or password.');
-    }
-  })
+/** 
+ * Restaurant Account Log-in 
+ * URL: '/rac'
+ * Method: GET
+ */
+app.get('/ral', (req, res) => {
+  verifyPassword(req.body)
+    .then(result => {
+      if (typeof result !== 'string') {
+        res.status(200).send({
+          response: 'some of sort CSRF token/cookie'
+        });
+      } else {
+        res.status(400).send({
+          response:'Log-in unsuccessful. Check email or password.'
+        });
+      }
+    })
 });
 
 /**
@@ -42,7 +48,7 @@ app.get('/RAL', (req, res) => {
   */
 app.post('/rac', (req, res) => {
   verifyContent(req.body)
-    .then((result) => {
+    .then(result => {
       /* Checks returned token for any false values and if there are, send 409 conflit */
       if (!result.email || !result.restaurant) {
         if (!result.restaurant && !result.email) {
