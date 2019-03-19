@@ -42,10 +42,15 @@ const checkAccount = (information, cb) => Account.findOne(information, cb);
   * @param {String} loginData.pw - login password
   * @param {requestCallback} cb - Callback that handles the response
   */
+// const loginAccount = (
+//   loginData,
+//   cb,
+// ) => Account.find({ email: loginData.email, pw: loginData.pw }, cb);
+
 const loginAccount = (
   loginData,
   cb,
-) => Account.find({ email: loginData.email, pw: loginData.pw }, cb);
+) => Account.find({ email: loginData.email }, cb);
 
 module.exports = {
   createAccount,
