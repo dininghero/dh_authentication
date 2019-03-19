@@ -27,7 +27,7 @@ const encryption = (saltedPassword, unsaltedPassword) => {
   return encrypt;
 };
 
- /**
+/**
  * generates random string of characters i.e salt
  * @function
  * @param {String} saltedPassword - password + salt

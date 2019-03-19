@@ -25,18 +25,16 @@ app.use(bodyParser.json());
 /* "RAL" - Restaurant Account Log-in */ 
 app.get('/RAL', (req, res) => {
   return new Promise ((resolve, reject) => {
-    let test = verifyPassword(req.body);
-    resolve(test);
+    let verification = verifyPassword(req.body);
+    resolve(verification);
   }).then(result => {
-    console.log('hi', result);
     if (typeof result !== 'string') {
       res.status(200).send('some of sort CSRF token/cookie');
     } else {
       res.status(200).send('Log-in unsuccessful. Check email or password.');
     }
   })
-  // res.status(200).send('hit');
-})
+});
 
 /* "RAC" - Restaurant Account Creation */
 app.post('/RAC', (req, res) => {
