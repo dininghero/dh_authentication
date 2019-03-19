@@ -1,7 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
 
-const { verifyContent, verifyPassword, encryption, decryption } = require('./utility/index');
+const { verifyContent, verifyPassword, _crypto } = require('./utility/index');
 const { connect } = require('../db/mongo/connections/index');
 const { createAccount, loginAccount } = require('../db/mongo/models/index');
 
@@ -66,7 +66,8 @@ app.post('/rac', (req, res) => {
         }
       } else {
         /* Else encrypt password and create a new account */
-        const encrypted = encryption(req.body.pw);
+        // const encrypted = encryption(req.body.pw);
+        const encrypted = new _crypto(req.body.pw).encryption(req.body.pw);
 
         /* Token for database entry */
         const newUser = {
