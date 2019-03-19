@@ -9,8 +9,28 @@ const Account = require('../schema');
   * @param {String} user.restaurant -  Account restaurant name
   * @param {String} user.pw - Account hashed password
   * @param {String} user.salt - Salt value added to the password before hashing
+  * @returns {Promise} Promise object success and failure
   */
 const createAccount = user => Account.create(user);
+
+/**
+  * Check an account email or restaurant name
+  * @name checkAccount
+  * @function
+  * @param {Object} information - Information to find
+  * @param {String} information.key - information.email || information.restaurant
+  * @returns {Promise} Promise object represents query data
+  */
+const checkAccount = information => new Promise((resolve, reject) => {
+  if (information.email || information.restaurant) {
+    Account.findOne(information, (err, result) => {
+      if (err) reject(new Error(err));
+      resolve(result);
+    });
+  } else {
+    reject(new Error('Error checkAccount: param must have email or restaurant key'));
+  }
+});
 
 /**
   * Update an account password, email or restaurant name
@@ -22,16 +42,6 @@ const createAccount = user => Account.create(user);
   * @param {requestCallback} cb - Callback that handles the response
   */
 const updateAccount = (id, newData, cb) => Account.findByIdAndUpdate(id, newData, cb);
-
-/**
-  * Check an account email or restaurant name
-  * @name checkAccount
-  * @function
-  * @param {Object} information - Information to find
-  * @param {String} information.key - information.email || information.restaurant
-  * @param {requestCallback} cb - Callback that handles the response
-  */
-const checkAccount = (information, cb) => Account.findOne(information, cb);
 
 /**
   * Retreive an account based on email and pw
