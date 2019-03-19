@@ -1,7 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
 
-const { salt, verifyContent, verifyPassword, encryption, decryption } = require('./utility/index');
+const { verifyContent, verifyPassword, encryption, decryption } = require('./utility/index');
 const { connect } = require('../db/mongo/connections/index');
 const { createAccount, loginAccount } = require('../db/mongo/models/index');
 
@@ -41,7 +41,6 @@ app.get('/RAL', (req, res) => {
   * Data Params: { email: [string], pw: [string], restaurant: [string] }
   */
 app.post('/rac', (req, res) => {
-  // const decrypted = aes256.decrypt(saltedPassword, encrypted);
   verifyContent(req.body)
     .then((result) => {
       /* Checks returned token for any false values and if there are, send 409 conflit */
@@ -61,15 +60,13 @@ app.post('/rac', (req, res) => {
         }
       } else {
         /* Else encrypt password and create a new account */
-        const saltValue = salt(16); /* salt values will be 16 bytes - 128 bit */
-        const saltedPassword = req.body.pw + saltValue;
-        const encrypted = encryption(saltedPassword, req.body.pw);
+        const encrypted = encryption(req.body.pw);
 
-        /* Input value */
+        /* Token for database entry */
         const newUser = {
           restaurant: req.body.restaurant,
-          pw: encrypted,
-          salt: saltValue,
+          pw: encrypted.hash,
+          salt: encrypted.salt,
           email: req.body.email,
         };
 
@@ -81,7 +78,7 @@ app.post('/rac', (req, res) => {
             });
           })
           .catch((err) => {
-            res.status(500).send({
+            res.status(400).send({
               response: 'Couldn\'t create account',
               error: err.message,
             });
@@ -89,7 +86,7 @@ app.post('/rac', (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(500).send({
+      res.status(400).send({
         response: 'Couldn\'t create account',
         error: err.message,
       });

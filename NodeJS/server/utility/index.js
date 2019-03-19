@@ -17,35 +17,35 @@ const salt = (length) => {
 };
 
 /**
-  * generates random string of characters i.e salt
+  * Generates Hash Key in place of user password with the use of SHA256 since there are few advantages to using SHA392 and SHA512
   * @name encryption
   * @function
-  * @param {String} saltedPassword - password + salt
-  * @param {String} unsaltedPassword - no salt password
+  * @param {String} password - password
   * @return {String}
   */
-const encryption = (saltedPassword, unsaltedPassword) => {
-  const algorithm = 'aes-256-cbc';
-  const cipher = crypto.createCipher(algorithm, saltedPassword);
-  let encrypt = cipher.update(unsaltedPassword, 'utf8', 'hex');
-  encrypt += cipher.final('hex');
-  return encrypt;
+const encryption = (password) => {
+  const algorithm = 'sha256';
+  const _salt = salt(16);
+  const hash = crypto.pbkdf2Sync(password, _salt, 1000, 64, algorithm).toString('hex');
+  const token = {
+    hash,
+    salt: _salt
+  };
+  return token;
 };
 
 /**
-  * generates random string of characters i.e salt
+  * Generates Hash Key using stored salt value
   * @name decryption
   * @function
-  * @param {String} saltedPassword - password + salt
-  * @param {String} cipher - cipher string
+  * @param {String} password - password
+  * @param {String} salt - salt value generated when account was created
   * @return {String}
   */
-const decryption = (saltedPassword, cipher) => {
-  const algorithm = 'aes-256-cbc';
-  const decipher = crypto.createDecipher(algorithm, saltedPassword);
-  let decrypt = decipher.update(cipher, 'hex', 'utf8');
-  decrypt += decipher.final('utf8');
-  return decrypt;
+const decryption = (password, salt) => {
+  const algorithm = 'sha256';
+  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, algorithm).toString('hex');
+  return hash;
 };
 
 /**
@@ -96,9 +96,8 @@ const verifyPassword = (credentials) => {
   }).then((result) => {
     return result[0];
   }).then((result) => {
-    const saltedPassword = credentials.pw + result.salt;
-    const encrypted = encryption(saltedPassword, credentials.pw);
-    if (encrypted === result.pw) {
+    const decrypt = decryption(credentials.pw, result.salt);
+    if (decrypt === result.pw) {
       return result;
     } else {
       return 'FAILED';
