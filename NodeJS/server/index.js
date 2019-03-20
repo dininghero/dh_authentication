@@ -1,7 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
 
-const { verifyContent, verifyPassword, _crypto } = require('./utility/index');
+const { verifyContent, verifyPassword, _crypto, JsonWebToken } = require('./utility/index');
 const { connect } = require('../db/mongo/connections/index');
 const { createAccount, loginAccount } = require('../db/mongo/models/index');
 
@@ -29,12 +29,24 @@ app.get('/ral', (req, res) => {
   verifyPassword(req.body)
     .then(result => {
       if (typeof result !== 'string') {
+        let JSONWebToken = new JsonWebToken();
+
+        /** decorate header and payload */
+        JSONWebToken.addAlgorithm('HS256');
+        JSONWebToken.addEmail(req.body.email);
+        JSONWebToken.addAdministratorStatus(false);
+        JSONWebToken.addExpiration(1);
+        
+        /** generate signed Json Web Token */
+        JSONWebToken.generateSignedToken(JSONWebToken.header, JSONWebToken.payload);
+
         res.status(200).send({
-          response: 'some of sort CSRF token/cookie'
+          response: 'Success!',
+          payload: JSONWebToken.base64UrlToken,
         });
       } else {
-        res.status(400).send({
-          response:'Log-in unsuccessful. Check email or password.'
+        res.status(401).send({
+          response:'Unauthorized.'
         });
       }
     })
