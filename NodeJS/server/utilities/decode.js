@@ -93,7 +93,7 @@ exports.decodeJsonWebToken = class decodeJWT {
 
 //logic for express **************** decoding 
 
-// let decodeToken = new decodeJsonWebToken();
+// const decodeToken = new decodeJsonWebToken();
 // if (decodeToken.authenticateJWT(JSONWebToken.base64UrlToken)) {
 //   const parsedJWT = decodeToken.readJsonWebToken(decodeToken.decodeBase64Url(JSONWebToken.base64UrlToken));
 //   const expired = decodeToken.verifyExpiration(parsedJWT);
