@@ -89,7 +89,7 @@ exports.JsonWebToken = class JWT {
   /**  Generates base64 encoded signed JWT */
   generateSignedToken(header, payload, key) {
     const algorithm = 'SHA256';
-    const secretKey = 'THIS_KEY_IS_SECRET';
+    const secretKey = 'sl49Adx2fY.GBx_bEfmAFeuXs.8PhhP8';
     const H64 = this.base64toBase64Url(Buffer.from(JSON.stringify(header)).toString('base64'));
     const P64 = this.base64toBase64Url(Buffer.from(JSON.stringify(payload)).toString('base64'));
 
