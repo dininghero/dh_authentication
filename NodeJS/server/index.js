@@ -1,14 +1,12 @@
 const express = require('express');
-const crypto = require('crypto');
 
-const { verifyContent, verifyPassword, _crypto, JsonWebToken } = require('./utility/index');
 const { connect } = require('../db/mongo/connections/index');
-const { createAccount, loginAccount } = require('../db/mongo/models/index');
+
+const ral = require('./middlewares/ral');
+const rac = require('./middlewares/rac');
 
 const port = 3000;
 const app = express();
-
-/* Middleware */
 
 // Parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
@@ -20,101 +18,12 @@ app.use(express.json());
 // ones / will cut down on the amount of code needing to be run from top to bottom
 // and reduce latency and bottlenecking in high traffic - run tests for this theory
 
-/** 
- * Restaurant Account Log-in 
- * URL: '/rac'
- * Method: GET
- */
-app.get('/ral', (req, res) => {
-  verifyPassword(req.body)
-    .then(result => {
-      if (typeof result !== 'string') {
-        let JSONWebToken = new JsonWebToken();
-
-        /** decorate header and payload */
-        JSONWebToken.addAlgorithm('HS256');
-        JSONWebToken.addEmail(req.body.email);
-        JSONWebToken.addAdministratorStatus(false);
-        JSONWebToken.addExpiration(1);
-        
-        /** generate signed Json Web Token */
-        JSONWebToken.generateSignedToken(JSONWebToken.header, JSONWebToken.payload);
-
-        res.status(200).send({
-          response: 'Success!',
-          payload: JSONWebToken.base64UrlToken,
-        });
-      } else {
-        res.status(401).send({
-          response:'Unauthorized.'
-        });
-      }
-    })
-});
-
-/**
-  * Restaurant Account Creation
-  * URL: '/rac'
-  * Method: POST
-  * Data Params: { email: [string], pw: [string], restaurant: [string] }
-  */
-app.post('/rac', (req, res) => {
-  verifyContent(req.body)
-    .then(result => {
-      /* Checks returned token for any false values and if there are, send 409 conflit */
-      if (!result.email || !result.restaurant) {
-        if (!result.restaurant && !result.email) {
-          res.status(409).send({
-            response: 'Email and restaurant already exist',
-          });
-        } else if (!result.email) {
-          res.status(409).send({
-            response: 'Email already exist',
-          });
-        } else {
-          res.status(409).send({
-            response: 'Restaurant already exist',
-          });
-        }
-      } else {
-        /* Else encrypt password and create a new account */
-        // const encrypted = encryption(req.body.pw);
-        const encrypted = new _crypto(req.body.pw).encryption(req.body.pw);
-
-        /* Token for database entry */
-        const newUser = {
-          restaurant: req.body.restaurant,
-          pw: encrypted.hash,
-          salt: encrypted.salt,
-          email: req.body.email,
-        };
-
-        /* Insert entry into database */
-        createAccount(newUser)
-          .then(() => {
-            res.status(201).send({
-              response: 'Account created',
-            });
-          })
-          .catch((err) => {
-            res.status(400).send({
-              response: 'Couldn\'t create account',
-              error: err.message,
-            });
-          });
-      }
-    })
-    .catch((err) => {
-      res.status(400).send({
-        response: 'Couldn\'t create account',
-        error: err.message,
-      });
-    });
-});
+/* Router-level middleware */
+app.use('/', [ral, rac]);
 
 /* Creates connection to MongoDb and when connection is established, starts server */
 const listen = () => app.listen(port, () => {
-  console.log(`*** app listening on http://localhost:${port}/ ***`);
+  console.log(`*** App listening on http://localhost:${port}/ ***`);
 });
 
 connect(listen);
