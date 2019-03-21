@@ -5,11 +5,20 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
-    "nodemon": "nodemon server/index.js"
+    "nodemon": "nodemon server/index.js",
+    "test": "jest",
+    "test-coverage": "jest --collectCoverage"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dininghero/dh_authentication.git"
+  },
   "author": "DiningHero",
   "license": "",
+  "bugs": {
+    "url": "https://github.com/dininghero/dh_authentication/issues"
+  },
+  "homepage": "https://github.com/dininghero/dh_authentication#readme",
   "dependencies": {
     "express": "^4.16.4",
     "mongoose": "^5.4.19"
@@ -19,6 +28,11 @@
     "eslint": "^5.15.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
+    "jest": "^24.5.0",
     "nodemon": "^1.18.10"
+  },
+  "engines": {
+    "node": "11.9.0",
+    "npm": "6.9.0"
   }
 }
