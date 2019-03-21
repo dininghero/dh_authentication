@@ -14,5 +14,7 @@ module.exports = {
   },
   rules: {
     "no-console": "off",
+    "no-underscore-dangle": ["error", { "allow": ["_crypto", "_salt"] }],
+    "class-methods-use-this": ["error", { "exceptMethods": ["salt", "decryption", "base64toBase64Url"] }],
   },
 };
