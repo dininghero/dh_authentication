@@ -36,10 +36,9 @@ exports.decodeJsonWebToken = class decodeJWT {
   /** Verify Token Authenticity */
   authenticateJWT(JsonWebToken, key) {
     const algorithm = 'SHA256';
-    const secretKey = 'THIS_KEY_IS_SECRET';
     const JWT = JsonWebToken.split('.');
     const unsignedToken = `${JWT[0]}.${JWT[1]}`;
-    const signatureVerification = crypto.createHmac(algorithm, secretKey).update(unsignedToken).digest('base64');
+    const signatureVerification = crypto.createHmac(algorithm, key).update(unsignedToken).digest('base64');
     const base64UrlSignature = this.convertBase64(signatureVerification);
     if (base64UrlSignature === JWT[2]) {
       return this.verified = true;
