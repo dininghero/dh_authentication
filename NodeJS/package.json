@@ -1,7 +1,7 @@
 {
   "name": "dh_authentication",
   "version": "1.0.0",
-  "description": "",
+  "description": "DiningHero auth. service",
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
@@ -9,9 +9,17 @@
     "test": "jest",
     "test-coverage": "jest --collectCoverage"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dininghero/dh_authentication.git"
+  },
   "keywords": [],
   "author": "DiningHero",
   "license": "",
+  "bugs": {
+    "url": "https://github.com/dininghero/dh_authentication/issues"
+  },
+  "homepage": "https://github.com/dininghero/dh_authentication#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "atob": "^2.1.2",

@@ -11,7 +11,7 @@ const ralo = require('./middlewares/ralo');
 const port = 3000;
 const app = express();
 
-const whitelist = ['http://localhost:1000']
+const whitelist = ['http://localhost:1000'];
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1) {
@@ -19,8 +19,8 @@ const corsOptions = {
     } else {
       callback(new Error('Not allowed by CORS'));
     }
-  }
-}
+  },
+};
 
 app.use(cors(corsOptions));
 
@@ -29,10 +29,6 @@ app.use(express.urlencoded({ extended: false }));
 
 // Parse application/json
 app.use(express.json());
-
-// For further streamlining, add parsers to only the routes that need the specific
-// ones / will cut down on the amount of code needing to be run from top to bottom
-// and reduce latency and bottlenecking in high traffic - run tests for this theory
 
 /* Router-level middleware */
 app.use('/', [ral, rac, vat, ralo]);
