@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 const { connect } = require('../db/mongo/connections/index');
 
@@ -9,6 +10,19 @@ const ralo = require('./middlewares/ralo');
 
 const port = 3000;
 const app = express();
+
+const whitelist = ['http://localhost:1000']
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}
+
+app.use(cors(corsOptions));
 
 // Parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
