@@ -12,7 +12,7 @@ const ral = express.Router();
   * Method: GET
   * Data Params: { email: [string], pw: [string] }
   */
-ral.route('/ral').get((req, res) => {
+ral.route('/ral').post((req, res) => {
   verifyPassword(req.body)
     .then((result) => {
       if (result === null) {
