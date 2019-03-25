@@ -9,10 +9,10 @@ const ral = express.Router();
 /**
   * Restaurant Account Log-in
   * URL: '/ral'
-  * Method: GET
+  * Method: POST
   * Data Params: { email: [string], pw: [string] }
   */
-ral.route('/ral').get((req, res) => {
+ral.route('/ral').post((req, res) => {
   verifyPassword(req.body)
     .then((result) => {
       if (result === null) {
@@ -29,7 +29,9 @@ ral.route('/ral').get((req, res) => {
         JSONWebToken.addExpiration(1);
 
         /** Generate signed Json Web Token */
-        JSONWebToken.generateSignedToken(JSONWebToken.header, JSONWebToken.payload, process.env.CURRENT_KEY);
+        JSONWebToken.generateSignedToken(
+          JSONWebToken.header, JSONWebToken.payload, process.env.CURRENT_KEY,
+        );
 
         res.status(200).send({
           response: 'Success!',

@@ -2,14 +2,14 @@ const { _crypto } = require('../server/utilities/crypto');
 
 const crypto = new _crypto();
 
-/* new crypto() */
+/** new crypto() */
 describe('new _crypto()', () => {
   test('should be a class', () => {
     expect(new _crypto()).toBeInstanceOf(_crypto);
   });
 });
 
-/* crypto.salt() */
+/** crypto.salt() */
 describe('crypto.salt()', () => {
   const mockInput = 16;
   test('should be a class method', () => {
@@ -23,7 +23,7 @@ describe('crypto.salt()', () => {
   });
 });
 
-/* crypto.encryption() */
+/** crypto.encryption() */
 describe('crypto.encryption()', () => {
   const mockPW = '1234';
   test('should be a class method', () => {
@@ -42,7 +42,7 @@ describe('crypto.encryption()', () => {
   });
 });
 
-/* crypto.decryption() */
+/** crypto.decryption() */
 describe('crypto.decryption()', () => {
   const mockSalt = 'bd41';
   const mockPW = '1234';

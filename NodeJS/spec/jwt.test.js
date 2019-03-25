@@ -8,7 +8,7 @@ describe('new JsonWebToken()', () => {
   });
 });
 
-/* jwt.addAlgorithm() */
+/** jwt.addAlgorithm() */
 describe('jwt.addAlgorithm()', () => {
   const mockAlgo = 'HS256';
   test('should be a class method', () => {
@@ -27,7 +27,7 @@ describe('jwt.addAlgorithm()', () => {
   });
 });
 
-/* jwt.addEmail() */
+/** jwt.addEmail() */
 describe('jwt.addEmail()', () => {
   const mockEmail = 'test@test.com';
   test('should be a class method', () => {
@@ -48,7 +48,7 @@ describe('jwt.addEmail()', () => {
   });
 });
 
-/* jwt.addAdministratorStatus() */
+/** jwt.addAdministratorStatus() */
 describe('jwt.addAdministratorStatus()', () => {
   const mockAdminStatus = false;
   test('should be a class method', () => {
@@ -69,7 +69,7 @@ describe('jwt.addAdministratorStatus()', () => {
   });
 });
 
-/* jwt.addExpiration() */
+/** jwt.addExpiration() */
 describe('jwt.addExpiration()', () => {
   const mockTime = 1;
   test('should be a class method', () => {
@@ -90,7 +90,7 @@ describe('jwt.addExpiration()', () => {
   });
 });
 
-/* jwt.base64toBase64Url() */
+/** jwt.base64toBase64Url() */
 describe('jwt.base64toBase64Url()', () => {
   const mockBase64 = '+test/=';
   test('should be a class method', () => {
@@ -104,7 +104,7 @@ describe('jwt.base64toBase64Url()', () => {
   });
 });
 
-/* jwt.generateSignedToken() */
+/** jwt.generateSignedToken() */
 describe('jwt.generateSignedToken()', () => {
   const mockHeader = { typ: 'JWT', alg: 'HS256' };
   const mockPayload = {
@@ -115,10 +115,11 @@ describe('jwt.generateSignedToken()', () => {
     admin: false,
     exp: new Date(),
   };
+  const mockKey = 'Qzj%K!f*1A_N%whWPUZCRJ1yIRSbhrpK';
   test('should be a class method', () => {
     expect(typeof jwt.generateSignedToken).toBe('function');
   });
   test('should return a string', () => {
-    expect(typeof jwt.generateSignedToken(mockHeader, mockPayload)).toBe('string');
+    expect(typeof jwt.generateSignedToken(mockHeader, mockPayload, mockKey)).toBe('string');
   });
 });
