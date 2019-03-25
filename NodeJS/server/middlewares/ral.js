@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 
 const { verifyPassword } = require('../utilities/verify');
@@ -28,7 +29,7 @@ ral.route('/ral').get((req, res) => {
         JSONWebToken.addExpiration(1);
 
         /** Generate signed Json Web Token */
-        JSONWebToken.generateSignedToken(JSONWebToken.header, JSONWebToken.payload);
+        JSONWebToken.generateSignedToken(JSONWebToken.header, JSONWebToken.payload, process.env.CURRENT_KEY);
 
         res.status(200).send({
           response: 'Success!',
