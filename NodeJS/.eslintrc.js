@@ -3,6 +3,7 @@ module.exports = {
     commonjs: true,
     es6: true,
     node: true,
+    jest: true,
   },
   extends: 'airbnb-base',
   globals: {
@@ -15,6 +16,21 @@ module.exports = {
   rules: {
     "no-console": "off",
     "no-underscore-dangle": ["error", { "allow": ["_crypto", "_salt"] }],
-    "class-methods-use-this": ["error", { "exceptMethods": ["salt", "decryption", "base64toBase64Url"] }],
+    "class-methods-use-this": ["error", { "exceptMethods":
+    [
+      "salt",
+      "decryption",
+      "base64toBase64Url",
+      "addAccessScopes",
+      "verifyExpiration",
+      "convertBase64",
+      "decodeBase64Url",
+      "daysInMonth",
+      "generateRandomInclusive",
+      "writeToFile",
+    ]
+  }],
+    "no-useless-escape": "off",
+    "radix": "off",
   },
 };

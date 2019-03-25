@@ -9,14 +9,15 @@ const { _crypto } = require('./crypto');
   * @param {String} - searchValue.email || searchValue.restaurant
   * @return {Promise} - Promise object structure: { email: Boolean, restaurant: Boolean }
   */
+
 const verifyContent = (searchValue) => {
-  /* Verification token for email and restaurants - false === in use */
+  /** Verification token for email and restaurants - false === in use */
   const ERVerification = {
     email: true,
     restaurant: true,
   };
 
-  /* List of Promises to verify email and restaurant uniqueness */
+  /** List of Promises to verify email and restaurant uniqueness */
   const emailQuery = checkAccount({ email: searchValue.email });
   const restaurantQuery = checkAccount({ restaurant: searchValue.restaurant });
 

@@ -5,17 +5,17 @@ const crypto = require('crypto');
   * @class
   *
   * @method salt
-  * @param {Number} length - Length of the random string
-  * @return
+  * @param {Number} length - positif number
+  * @return {String}
   *
   * @method encryption
   * @param {String} password - User password
-  * @return
+  * @return {Object}
   *
   * @method decryption
   * @param {String} password - User password
   * @param {String} salt - Stored salt value
-  * @return
+  * @return {String}
   */
 
 exports._crypto = class Crypto {
