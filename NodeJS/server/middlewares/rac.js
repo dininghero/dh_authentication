@@ -10,6 +10,7 @@ const rac = express.Router();
   * Restaurant Account Creation
   * URL: '/rac'
   * Method: POST
+  * Headers: { Content-Type: application/json }
   * Data Params: { email: [string], pw: [string], restaurant: [string] }
   */
 rac.route('/rac').post((req, res) => {

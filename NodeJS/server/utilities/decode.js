@@ -32,6 +32,7 @@ exports.DecodeJsonWebToken = class decodeJWT {
   constructor() {
     this.token = {};
     this.verified = false;
+    this.flag = false;
   }
 
   /** Verify Token Authenticity */
@@ -50,7 +51,6 @@ exports.DecodeJsonWebToken = class decodeJWT {
 
   /** Verifies validity of the expiration time stamp */
   verifyExpiration(unsignedToken) {
-    let flag = false;
     const expiration = JSON.parse(unsignedToken.payload).exp;
     const today = JSON.stringify(new Date());
     const alteredExp = expiration.replace(/([-T:])/gi, '*');
@@ -66,10 +66,11 @@ exports.DecodeJsonWebToken = class decodeJWT {
        - if true, return true -  else return false */
     for (let i = 0; i < chunksExp.length; i += 1) {
       if (parseInt(chunksToday[i]) > parseInt(chunksExp[i])) {
-        flag = true;
+        this.flag = true;
+        return this.flag;
       }
     }
-    return flag;
+    return this.flag;
   }
 
   /** Converts base64 to base64UrlEncoded - remove all /+= and replaced with Url safe chars */

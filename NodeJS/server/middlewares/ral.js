@@ -1,5 +1,5 @@
-require('dotenv').config();
 const express = require('express');
+require('dotenv').config();
 
 const { verifyPassword } = require('../utilities/verify');
 const { JsonWebToken } = require('../utilities/jwt');
@@ -11,6 +11,7 @@ const ral = express.Router();
   * Restaurant Account Log-in
   * URL: '/ral'
   * Method: POST
+  * Headers: { Content-Type: application/json }
   * Data Params: { email: [string], pw: [string] }
   */
 ral.route('/ral').post((req, res) => {
