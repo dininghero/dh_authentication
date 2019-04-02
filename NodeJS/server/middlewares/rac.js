@@ -15,7 +15,7 @@ const rac = express.Router();
 rac.route('/rac').post((req, res) => {
   verifyContent(req.body)
     .then((result) => {
-      /* Checks returned token for any false values and if there are, send 409 conflit */
+      /** Checks returned token for any false values and if there are, send 409 conflit */
       if (!result.email || !result.restaurant) {
         if (!result.restaurant && !result.email) {
           res.status(409).send({
@@ -31,10 +31,10 @@ rac.route('/rac').post((req, res) => {
           });
         }
       } else {
-        /* Else encrypt password and create a new account */
+        /** Else encrypt password and create a new account */
         const encrypted = new _crypto(req.body.pw).encryption(req.body.pw);
 
-        /* Token for database entry */
+        /** Token for database entry */
         const newUser = {
           restaurant: req.body.restaurant,
           pw: encrypted.hash,
@@ -42,7 +42,7 @@ rac.route('/rac').post((req, res) => {
           email: req.body.email,
         };
 
-        /* Insert entry into database */
+        /** Insert entry into database */
         createAccount(newUser)
           .then(() => {
             res.status(201).send({

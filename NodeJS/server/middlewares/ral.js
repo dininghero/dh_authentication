@@ -10,7 +10,7 @@ const ral = express.Router();
 /**
   * Restaurant Account Log-in
   * URL: '/ral'
-  * Method: GET
+  * Method: POST
   * Data Params: { email: [string], pw: [string] }
   */
 ral.route('/ral').post((req, res) => {
@@ -33,7 +33,9 @@ ral.route('/ral').post((req, res) => {
         // JSONWebToken.addXSRFToken(csrf_token);
 
         /** Generate signed Json Web Token */
-        JSONWebToken.generateSignedToken(JSONWebToken.header, JSONWebToken.payload, process.env.CURRENT_KEY);
+        JSONWebToken.generateSignedToken(
+          JSONWebToken.header, JSONWebToken.payload, process.env.CURRENT_KEY,
+        );
 
         res.status(200).send({
           response: 'Success!',

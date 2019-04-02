@@ -67,11 +67,11 @@ exports.JsonWebToken = class JWT {
   }
 
   /** Adds scopes which the user as access to based on their credentials */
-  addAccessScopes(someValue) {
-    // needs to be defined
-    let scopes = [];
-    return scopes;
-  }
+  // addAccessScopes(someValue) {
+  //   // needs to be defined
+  //   const scopes = [];
+  //   return scopes;
+  // }
 
   /** Adds expiration date which token will no longer be valid  */
   addExpiration(time) {
