@@ -14,7 +14,7 @@ cookie.use((req, res, next) => {
   // const _cookie = req.cookie;
   // if cookie value is doesn't exist, make a cookie and pass it to the next route
   // if (_cookie === undefined) {
-  if (req.cookies === undefined || req.signedCookies) {
+  if (req.cookies === undefined || req.signedCookies === undefined) {
     /** instantiate csrf token */
     const csrf = new csrfToken();
 
