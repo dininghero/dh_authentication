@@ -81,6 +81,11 @@ exports.JsonWebToken = class JWT {
     return this.payload;
   }
 
+  addXSRFToken(csrfToken) {
+    this.payload.xsrf = csrfToken;
+    return this.payload;
+  }
+
   /**  Converts base64 to base64UrlEncoded - remove all /+= and replaced with Url safe chars */
   base64toBase64Url(string) {
     return string.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');

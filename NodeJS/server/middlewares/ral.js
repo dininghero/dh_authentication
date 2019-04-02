@@ -3,6 +3,7 @@ const express = require('express');
 
 const { verifyPassword } = require('../utilities/verify');
 const { JsonWebToken } = require('../utilities/jwt');
+const { csrfToken } = require('../utilities/csrfGenerator');
 
 const ral = express.Router();
 
@@ -13,6 +14,7 @@ const ral = express.Router();
   * Data Params: { email: [string], pw: [string] }
   */
 ral.route('/ral').post((req, res) => {
+  console.log('res', res);
   verifyPassword(req.body)
     .then((result) => {
       if (result === null) {
@@ -20,6 +22,7 @@ ral.route('/ral').post((req, res) => {
           response: 'Account not found',
         });
       } else if (result) {
+        /** instantiate new JWT */
         const JSONWebToken = new JsonWebToken();
 
         /** Decorate header and payload */
@@ -27,6 +30,7 @@ ral.route('/ral').post((req, res) => {
         JSONWebToken.addEmail(req.body.email);
         JSONWebToken.addAdministratorStatus(false);
         JSONWebToken.addExpiration(1);
+        // JSONWebToken.addXSRFToken(csrf_token);
 
         /** Generate signed Json Web Token */
         JSONWebToken.generateSignedToken(JSONWebToken.header, JSONWebToken.payload, process.env.CURRENT_KEY);
