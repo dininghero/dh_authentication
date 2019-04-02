@@ -5,6 +5,7 @@ const { connect } = require('../db/mongo/connections/index');
 
 const ral = require('./middlewares/ral');
 const rac = require('./middlewares/rac');
+const cookie = require('./middlewares/cookie');
 const vat = require('./middlewares/vat');
 const ralo = require('./middlewares/ralo');
 
@@ -29,6 +30,9 @@ app.use(express.urlencoded({ extended: false }));
 
 // Parse application/json
 app.use(express.json());
+
+// Cookie parser middleware
+app.use('/', [cookie]);
 
 /* Router-level middleware */
 app.use('/', [ral, rac, vat, ralo]);
