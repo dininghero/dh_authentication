@@ -21,8 +21,9 @@ vat.route('/vat').post((req, res) => {
 
   if (isAuth) {
     res.status(200).send({ response: 'Token Verified', isAuth });
+  } else {
+    res.status(401).send({ response: 'Unauthorized', isAuth });
   }
-  res.status(401).send({ response: 'Unauthorized', isAuth });
 });
 
 module.exports = vat;
