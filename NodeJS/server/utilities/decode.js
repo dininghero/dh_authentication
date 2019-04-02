@@ -59,8 +59,8 @@ exports.DecodeJsonWebToken = class decodeJWT {
     const chunksToday = alterToday.split('*');
 
     /** Remove last part of date */
-    chunksExp.pop();
-    chunksToday.pop();
+    chunksExp.splice(3, chunksExp.length - 1);
+    chunksToday.splice(3, chunksToday.length - 1);
 
     /** Iterate thru all and see if any values are greater in today's date
        - if true, return true -  else return false */
