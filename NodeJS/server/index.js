@@ -12,7 +12,7 @@ const ralo = require('./middlewares/ralo');
 const port = 3000;
 const app = express();
 
-// const whitelist = ['http://localhost:3000'];
+// const whitelist = ['http://localhost:3000', 'http://localhost:1000'];
 // const corsOptions = {
 //   origin: (origin, callback) => {
 //     if (whitelist.indexOf(origin) !== -1) {
@@ -32,10 +32,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Cookie parser middleware
-app.use('/', [cookie]);
+app.use('/', [cookie, vat]);
 
 /* Router-level middleware */
-app.use('/', [ral, rac, vat, ralo]);
+app.use('/', [ral, rac, ralo]);
+
+app.post('/test', (req, res) => {
+  res.send('hello');
+})
 
 /* Creates connection to MongoDb and when connection is established, starts server */
 const listen = () => app.listen(port, () => {

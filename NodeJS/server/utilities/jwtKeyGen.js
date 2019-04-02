@@ -1,4 +1,6 @@
-require('dotenv').config({ path: '../../.env', debug: process.env.DEBUG });
+// require('dotenv').config({ path: '../../.env', debug: true });
+const dotenv = require('dotenv');
+const { parsed } = dotenv.config({ path: '../../.env', debug: true });
 const fs = require('fs');
 
 /**
@@ -73,6 +75,12 @@ exports.KeyValidation = class KeyVal {
       fs.writeFile('../../.env', newEntry, (errWriteFile) => {
         if (errWriteFile) throw errWriteFile;
       });
+      
+      // Set child processes to new values 
+      parsed.CURRENT_KEY = key;
+      parsed.DATE_GENERATED = new Date().toISOString();
+      process.env.CURRENT_KEY = parsed.CURRENT_KEY;
+      process.env.DATE_GENERATED = parsed.DATE_GENERATED;
     });
   }
 
