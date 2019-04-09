@@ -10,6 +10,7 @@ const cookie = require('./middlewares/cookie');
 const vat = require('./middlewares/vat');
 const ralo = require('./middlewares/ralo');
 const tblv = require('./middlewares/tblv');
+const ec = require('./middlewares/ec');
 
 const port = 3000;
 const app = express();
@@ -34,7 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Cookie parser middleware
-app.use('/', [cookie, tblv, vat]);
+app.use('/', [cookie, tblv, ec, vat]);
 
 /* Router-level middleware */
 app.use('/', [ral, rac, ralo]);
