@@ -10,7 +10,10 @@ const ralo = express.Router();
   * Data Params:
   */
 ralo.route('/ralo').post((req, res) => {
-  res.send('/ralo');
+  // res.status(200).send({
+  //   response: 'Sucessful Log-out.'
+  // });
+  res.status(302).redirect() // redirect to log in page
 });
 
 module.exports = ralo;

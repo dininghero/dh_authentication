@@ -12,8 +12,8 @@ cookie.use(cookieParser());
 
 cookie.use((req, res, next) => {
   // const _cookie = req.cookie;
-  // if cookie value is doesn't exist, make a cookie and pass it to the next route
   // if (_cookie === undefined) {
+  // if cookie value is doesn't exist, make a cookie and pass it to the next route
   if (req.cookies === undefined || req.signedCookies === undefined) {
     /** instantiate csrf token */
     const csrf = new csrfToken();
@@ -30,6 +30,13 @@ cookie.use((req, res, next) => {
       maxAge: 86400000, /* 24 hours */
       secure: true,
     });
+    res.set('X-CSRF-TOKEN', csrf_token);
+  }
+
+  /** handle user log out requests */
+  if (req.originalUrl.toLowerCase() === '/ralo') {
+    // res.clearCookie(req.cookies);
+    // res.clearCookie(req.signedCookies);
   }
   next();
 });

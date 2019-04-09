@@ -15,7 +15,6 @@ const ral = express.Router();
   * Data Params: { email: [string], pw: [string] }
   */
 ral.route('/ral').post((req, res) => {
-  console.log('res', res);
   verifyPassword(req.body)
     .then((result) => {
       if (result === null) {

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
+// Mongo Database
 const { connect } = require('../db/mongo/connections/index');
 
 const ral = require('./middlewares/ral');
@@ -8,20 +9,21 @@ const rac = require('./middlewares/rac');
 const cookie = require('./middlewares/cookie');
 const vat = require('./middlewares/vat');
 const ralo = require('./middlewares/ralo');
+const tblv = require('./middlewares/tblv');
 
 const port = 3000;
 const app = express();
 
-// const whitelist = ['http://localhost:3000', 'http://localhost:1000'];
-// const corsOptions = {
-//   origin: (origin, callback) => {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-// };
+const whitelist = ['http://localhost:3000', 'http://localhost:1000'];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
 
 // app.use(cors(corsOptions));
 
@@ -32,14 +34,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Cookie parser middleware
-app.use('/', [cookie, vat]);
+app.use('/', [cookie, tblv, vat]);
 
 /* Router-level middleware */
 app.use('/', [ral, rac, ralo]);
 
+// route used execlusively for testing
 app.post('/test', (req, res) => {
-  res.send('hello');
-})
+  res.send('endpoint: /test');
+});
 
 /* Creates connection to MongoDb and when connection is established, starts server */
 const listen = () => app.listen(port, () => {
