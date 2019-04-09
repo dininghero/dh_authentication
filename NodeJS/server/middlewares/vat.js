@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const { parsed } = dotenv.config({ debug: true })
+const { parsed } = dotenv.config({ debug: true });
 
 const { DecodeJsonWebToken } = require('../utilities/decode');
 
@@ -11,7 +11,7 @@ const vat = express.Router();
   * URL: '/vat'
   * Method: POST
   * Headers: { Content-Type: application/json }
-  * Data Params: { JTW: [string] }
+  * Data Params: { JWT: [string] }
   */
  vat.use((req, res, next) => {
   // By JWT verification if a user is attempting to create an account or authenticate
@@ -28,6 +28,7 @@ const vat = express.Router();
       const parsedJWT = decodeToken.readJsonWebToken(decodeToken.decodeBase64Url(req.body.JWT));
       const expired = decodeToken.verifyExpiration(parsedJWT);
       if (expired) {
+        // use res.render to send fail and a html file
         res.status(401).send({
           response: 'Unauthorized.'
         });
@@ -35,6 +36,7 @@ const vat = express.Router();
         next();
       }
     } else {
+      // use res.render to send fail and a html file
       res.status(401).send({
         response: 'Unauthorized.'
       });
