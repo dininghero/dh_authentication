@@ -11,36 +11,31 @@ const rac = express.Router();
   * URL: '/rac'
   * Method: POST
   * Headers: { Content-Type: application/json }
-  * Data Params: { email: [string], pw: [string], restaurant: [string] }
+  * Data Params: { email: [string], pw: [string], firstname: [string], lastname: [string] }
   */
 rac.route('/rac').post((req, res) => {
-  verifyContent(req.body)
+  const {
+    firstname, lastname, email, pw,
+  } = req.body;
+
+  verifyContent({ email: email })
     .then((result) => {
-      /** Checks returned token for any false values and if there are, send 409 conflit */
-      if (!result.email || !result.restaurant) {
-        if (!result.restaurant && !result.email) {
-          res.status(409).send({
-            response: 'Email and restaurant already exist',
-          });
-        } else if (!result.email) {
-          res.status(409).send({
-            response: 'Email already exist',
-          });
-        } else {
-          res.status(409).send({
-            response: 'Restaurant already exist',
-          });
-        }
+      /** Checks returned token, if false, send 409 conflit */
+      if (!result) {
+        res.status(409).send({
+          response: 'Email already exist',
+        });
       } else {
         /** Else encrypt password and create a new account */
-        const encrypted = new _crypto(req.body.pw).encryption(req.body.pw);
+        const encrypted = new _crypto(pw).encryption(pw);
 
         /** Token for database entry */
         const newUser = {
-          restaurant: req.body.restaurant,
+          firstname: firstname,
+          lastname: lastname,
           pw: encrypted.hash,
           salt: encrypted.salt,
-          email: req.body.email,
+          email: email,
         };
 
         /** Insert entry into database */
