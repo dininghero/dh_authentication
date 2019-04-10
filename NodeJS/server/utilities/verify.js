@@ -1,40 +1,27 @@
-const { checkAccount, loginAccount } = require('../../db/mongo/models');
+const { loginAccount } = require('../../db/mongo/models');
 const { _crypto } = require('./crypto');
 
 /**
-  * Check if email or restaurant are in the database
+  * Check if email is in the database
   * @name verifyContent
   * @function
-  * @param {Object} searchValue
-  * @param {String} - searchValue.email || searchValue.restaurant
-  * @return {Promise} - Promise object structure: { email: Boolean, restaurant: Boolean }
+  * @param {Object} emailToVerify
+  * @param {String} emailToVerify.email
+  * @return {Promise} - Promise object structure: Boolean
   */
 
-const verifyContent = (searchValue) => {
-  /** Verification token for email and restaurants - false === in use */
-  const ERVerification = {
-    email: true,
-    restaurant: true,
-  };
-
-  /** List of Promises to verify email and restaurant uniqueness */
-  const emailQuery = checkAccount({ email: searchValue.email });
-  const restaurantQuery = checkAccount({ restaurant: searchValue.restaurant });
-
-  return Promise.all([emailQuery, restaurantQuery])
-    .then((result) => {
-      if (result[0] !== null) {
-        ERVerification.email = false;
+const verifyContent = emailToVerify => new Promise((resolve, reject) => {
+  loginAccount(emailToVerify)
+    .then((account) => {
+      if (account.length === 0) {
+        resolve(true);
       }
-      if (result[1] !== null) {
-        ERVerification.restaurant = false;
-      }
-      return ERVerification;
+      resolve(false);
     })
     .catch((err) => {
-      console.log(err.message);
+      reject(err);
     });
-};
+});
 
 /**
   * Verifies username is in database and then check password
