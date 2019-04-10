@@ -30,7 +30,7 @@ ral.route('/ral').post((req, res) => {
         JSONWebToken.addEmail(req.body.email);
         JSONWebToken.addAdministratorStatus(false);
         JSONWebToken.addExpiration(1);
-        // JSONWebToken.addXSRFToken(csrf_token);
+        JSONWebToken.addXSRFToken(res.locals.csrf);
 
         /** Generate signed Json Web Token */
         JSONWebToken.generateSignedToken(
