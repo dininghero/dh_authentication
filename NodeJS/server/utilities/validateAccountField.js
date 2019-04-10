@@ -1,3 +1,19 @@
+/** 
+ * This class validates the information that is being passed before inserting into database and constructs an object with boolean values. 
+ * @class
+ * @constructor
+ * 
+ * @method validatePassword
+ * @param { String } - password value
+ * 
+ * @method validateEmail
+ * @param { String } - email value
+ * 
+ * @method validateName
+ * @param { String } - name value
+ * @param { String } - type - first or last 
+*/
+
 exports.validateAccountForms = class ValidateAccountForms {
   constructor() {
     this.pw = false;
