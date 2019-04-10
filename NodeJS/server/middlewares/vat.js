@@ -33,6 +33,7 @@ const vat = express.Router();
           response: 'Unauthorized.'
         });
       } else {
+        res.locals.xsrfToken = JSON.parse(parsedJWT.payload).xsrfToken;
         next();
       }
     } else {

@@ -82,7 +82,7 @@ exports.JsonWebToken = class JWT {
   }
 
   addXSRFToken(csrfToken) {
-    this.payload.xsrf = csrfToken;
+    this.payload.xsrfToken = csrfToken;
     return this.payload;
   }
 
