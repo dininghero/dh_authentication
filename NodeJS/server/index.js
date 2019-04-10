@@ -27,7 +27,7 @@ const corsOptions = {
   },
 };
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 // Parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
