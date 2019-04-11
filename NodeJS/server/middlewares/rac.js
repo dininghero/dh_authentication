@@ -2,7 +2,8 @@ const express = require('express');
 
 const { createAccount } = require('../../db/mongo/models/index');
 const { verifyContent } = require('../utilities/verify');
-const { _crypto } = require('../utilities/crypto');
+const { Crypto } = require('../utilities/crypto');
+const { ValidateAccountForms } = require('../utilities/validateAccountField');
 
 const rac = express.Router();
 
@@ -18,6 +19,15 @@ rac.route('/rac').post((req, res) => {
     firstname, lastname, email, pw,
   } = req.body;
 
+  // const validation = new ValidateAccountForms();
+
+  // validation.validateName(firstname, 'first');
+  // validation.validateName(lastname, 'last');
+  // validation.validateEmail(email);
+  // validation.validatePassword(pw);
+
+  // console.log(validation);
+
   verifyContent({ email: email })
     .then((result) => {
       /** Checks returned token, if false, send 409 conflit */
@@ -27,7 +37,7 @@ rac.route('/rac').post((req, res) => {
         });
       } else {
         /** Else encrypt password and create a new account */
-        const encrypted = new _crypto(pw).encryption(pw);
+        const encrypted = new Crypto(pw).encryption(pw);
 
         /** Token for database entry */
         const newUser = {

@@ -18,7 +18,7 @@ const crypto = require('crypto');
   * @return {String}
   */
 
-exports._crypto = class Crypto {
+exports.Crypto = class Crypto {
   salt(length) {
     return crypto
       .randomBytes(Math.ceil(length / 2))
