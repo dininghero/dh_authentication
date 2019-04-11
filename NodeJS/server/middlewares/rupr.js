@@ -10,7 +10,7 @@ const rupr = express.Router();
   * Data Params: {  }
   */
 rupr.route('rupr').post((req, res) => {
-  
+
 });
 
 module.exports = rupr;

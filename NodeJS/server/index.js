@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
-// Mongo Database
+// Mongo Connection
 const { connect } = require('../db/mongo/connections/index');
 
 const ral = require('./middlewares/ral');

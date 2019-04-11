@@ -16,6 +16,7 @@ module.exports = {
   rules: {
     "no-console": "off",
     "no-underscore-dangle": ["error", { "allow": ["_crypto", "_salt"] }],
+    "camelcase": "off",
     "class-methods-use-this": ["error", { "exceptMethods":
     [
       "salt",

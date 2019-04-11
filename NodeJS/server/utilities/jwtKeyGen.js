@@ -1,5 +1,6 @@
 // require('dotenv').config({ path: '../../.env', debug: true });
 const dotenv = require('dotenv');
+
 const { parsed } = dotenv.config({ path: '../../.env', debug: true });
 const fs = require('fs');
 
@@ -75,8 +76,8 @@ exports.KeyValidation = class KeyVal {
       fs.writeFile('../../.env', newEntry, (errWriteFile) => {
         if (errWriteFile) throw errWriteFile;
       });
-      
-      // Set child processes to new values 
+
+      // Set child processes to new values
       parsed.CURRENT_KEY = key;
       parsed.DATE_GENERATED = new Date().toISOString();
       process.env.CURRENT_KEY = parsed.CURRENT_KEY;
@@ -95,7 +96,7 @@ exports.KeyValidation = class KeyVal {
     const currDaysInMonth = this.daysInMonth(parseInt(currentDateArray[0]), parseInt(currentDateArray[1]));
     const prevDaysInMonth = this.daysInMonth(
       parseInt(prevDateArray[0]),
-      parseInt(prevDateArray[1])
+      parseInt(prevDateArray[1]),
     );
     const intConverted = {
       currDay: parseInt(currentDateArray[2]),

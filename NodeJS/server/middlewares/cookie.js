@@ -1,7 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 
-const { csrfToken } = require('../utilities/csrfGenerator');
+const { CsrfToken } = require('../utilities/csrfGenerator');
 
 const cookie = express.Router();
 
@@ -14,7 +14,7 @@ cookie.use((req, res, next) => {
   // if cookie value is doesn't exist, make a cookie and pass it to the next route
   if (JSON.stringify(req.cookies) === '{}' || JSON.stringify(req.signedCookies) === '{}') {
     /** instantiate csrf token */
-    const csrf = new csrfToken();
+    const csrf = new CsrfToken();
 
     /** configure cookie to be sent to user with httpOnly enabled - only this APi will
     be able to translate the contents of the cookie and not the javascript in the browser */

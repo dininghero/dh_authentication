@@ -11,7 +11,7 @@ const ralo = express.Router();
   */
 ralo.route('/ralo').post((req, res) => {
   res.status(200).send({
-    response: 'Sucessful Log-out.'
+    response: 'Sucessful Log-out.',
   });
   // res.status(302).redirect() // redirect to log in page
 });

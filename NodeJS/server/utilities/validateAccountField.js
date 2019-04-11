@@ -1,20 +1,23 @@
-/** 
- * This class validates the information that is being passed before inserting into database and constructs an object with boolean values. 
- * @class
- * @constructor
- * 
- * @method validatePassword
- * @param { String } - password value
- * 
- * @method validateEmail
- * @param { String } - email value
- * 
- * @method validateName
- * @param { String } - name value
- * @param { String } - type - first or last 
-*/
+/**
+  * This class validates the information that is being passed before inserting
+  * into database and constructs an object with boolean values.
+  * @class
+  *
+  * @method validatePassword
+  * @param {String} value - password
+  * @return {Boolean}
+  *
+  * @method validateEmail
+  * @param {String} value - email
+  * @return {Boolean}
+  *
+  * @method validateName
+  * @param {String} value - name
+  * @param {String} type - first or last
+  * @return {Boolean}
+  */
 
-exports.validateAccountForms = class ValidateAccountForms {
+exports.ValidateAccountForms = class ValidateAccountForms {
   constructor() {
     this.pw = false;
     this.firstName = false;
@@ -30,7 +33,7 @@ exports.validateAccountForms = class ValidateAccountForms {
     let uppercase = null;
     let lowercase = null;
 
-    for (let i = 0; i < removeNonChar.length; i++) {
+    for (let i = 0; i < removeNonChar.length; i += 1) {
       if (removeNonChar[i].toUpperCase() === removeNonChar[i]) {
         uppercase = 'OK';
         if (uppercase && lowercase) {
@@ -46,7 +49,7 @@ exports.validateAccountForms = class ValidateAccountForms {
           continue;
         }
       }
-    };
+    }
 
     if (len && uppercase && lowercase && digit && specialChar) {
       this.pw = true;
@@ -63,15 +66,19 @@ exports.validateAccountForms = class ValidateAccountForms {
   validateName(value, type) {
     const digit = value.match(/([0-9])/gi);
     const specialChar = value.match(/([~`!#$%^&*+=\-[\]\\';,/{}|\\":<>?])/gi);
-    switch(type) {
+    switch (type) {
       case 'first':
-      if (!digit && !specialChar) {
-        this.firstName = true;
-      }
-      case 'last': 
-      if (!digit && !specialChar) {
-        this.lastName = true;
-      }
+        if (!digit && !specialChar) {
+          this.firstName = true;
+        }
+        break;
+      case 'last':
+        if (!digit && !specialChar) {
+          this.lastName = true;
+        }
+        break;
+      default:
+        // do nothing
     }
   }
 };

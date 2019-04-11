@@ -4,7 +4,7 @@ require('dotenv').config();
 const { verifyPassword } = require('../utilities/verify');
 const { JsonWebToken } = require('../utilities/jwt');
 
-const { validateAccountForms } = require('../utilities/validateAccountField');
+const { ValidateAccountForms } = require('../utilities/validateAccountField');
 
 const ral = express.Router();
 
@@ -16,16 +16,17 @@ const ral = express.Router();
   * Data Params: { email: [string], pw: [string] }
   */
 ral.route('/ral').post((req, res) => {
-  //testing 
-  const validation = new validateAccountForms();
-  validation.validatePassword('Aa!1ssss');
+  // const validation = new ValidateAccountForms();
 
-  validation.validateEmail('neil@neil.com');
+  // validation.validatePassword('Aa!1ssss');
 
-  validation.validateName('Neil', 'first');
+  // validation.validateEmail('neil@neil.com');
 
-  validation.validateName('Neil', 'last')
-  console.log(validation);
+  // validation.validateName('Neil', 'first');
+
+  // validation.validateName('Neil', 'last');
+
+  // console.log(validation);
 
 
   verifyPassword(req.body)

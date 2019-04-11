@@ -9,7 +9,6 @@ const { _crypto } = require('./crypto');
   * @param {String} emailToVerify.email
   * @return {Promise} - Promise object structure: Boolean
   */
-
 const verifyContent = emailToVerify => new Promise((resolve, reject) => {
   loginAccount(emailToVerify)
     .then((account) => {
