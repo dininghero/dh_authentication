@@ -22,7 +22,8 @@ cookie.use((req, res, next) => {
     /** generate 256 bit CSPRNG value */
     const csrf_token = csrf.generateToken(32);
 
-    // setting csrf as a variable for this particular instance of res so it can be passed down the chain when next() is invoked
+    /** setting csrf as a variable for this particular instance of res so it can
+    be passed down the chain when next() is invoked */
     res.locals.csrf = csrf_token;
 
     res.cookie('access_token', csrf_token, {

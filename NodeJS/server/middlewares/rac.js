@@ -19,14 +19,20 @@ rac.route('/rac').post((req, res) => {
     firstname, lastname, email, pw,
   } = req.body;
 
-  // const validation = new ValidateAccountForms();
+  /** Validating data before inserting into database */
+  const validation = new ValidateAccountForms();
 
-  // validation.validateName(firstname, 'first');
-  // validation.validateName(lastname, 'last');
-  // validation.validateEmail(email);
-  // validation.validatePassword(pw);
+  validation.validateName(firstname, 'first');
+  validation.validateName(lastname, 'last');
+  validation.validateEmail(email);
+  validation.validatePassword(pw);
 
-  // console.log(validation);
+  if (!validation.pw || !validation.email || !validation.lastName || !validation.firstName) {
+    res.status(400).send({
+      response: 'Couldn\'t create account',
+      error: 'String validation failed',
+    });
+  }
 
   verifyContent({ email: email })
     .then((result) => {
