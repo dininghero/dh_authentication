@@ -1,5 +1,5 @@
 const express = require('express');
-const { RemoveKeys } = require('../../db/redis/utility/remove');
+const { RemoveKeys } = require('../../db/redis/utilities/remove');
 
 const ec = express.Router();
 
@@ -7,6 +7,7 @@ const ec = express.Router();
   * Expiration Check - Checks token blacklist for expired tokens and removed them from redis
   * Headers: { Content-Type: application/json }
   */
+
 ec.use((req, res, next) => {
   const redisClient = res.locals.connection;
   const tokenStatus = new RemoveKeys();

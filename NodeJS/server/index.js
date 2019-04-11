@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const chalk = require('chalk');
 
-// Mongo Connection
+/* Mongo Connection */
 const { connect } = require('../db/mongo/connection/index');
 
 const ral = require('./middlewares/ral');
@@ -30,19 +30,19 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Parse application/x-www-form-urlencoded
+/* Parse application/x-www-form-urlencoded */
 app.use(express.urlencoded({ extended: false }));
 
-// Parse application/json
+/* Parse application/json */
 app.use(express.json());
 
-// Cookie parser middleware
+/* Cookie parser middleware */
 app.use('/', [cookie, tblv, ec, vat, cc]);
 
 /* Router-level middleware */
 app.use('/', [ral, rac, ralo]);
 
-// route used execlusively for testing
+/* route used execlusively for testing */
 app.post('/test', (req, res) => {
   res.send('endpoint: /test');
 });

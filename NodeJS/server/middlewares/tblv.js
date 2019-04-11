@@ -1,9 +1,9 @@
 const express = require('express');
-const { connectToRedis, disconnectRedis } = require('../../db/redis/connection/index');
-const { query } = require('../../db/redis/utility/query');
-const { cache } = require('../../db/redis/utility/cache');
-const { retrieveAll } = require('../../db/redis/utility/retrieveAll');
-const { removeKeys } = require('../../db/redis/utility/remove');
+const { connectToRedis } = require('../../db/redis/connection/index');
+const { query } = require('../../db/redis/utilities/query');
+const { cache } = require('../../db/redis/utilities/cache');
+const { retrieveAll } = require('../../db/redis/utilities/retrieveAll');
+const { removeKeys } = require('../../db/redis/utilities/remove');
 
 /** Establish redis connection */
 const redisClient = connectToRedis();
@@ -16,6 +16,7 @@ const tblv = express.Router();
   * Headers: { Content-Type: application/json }
   * Data Params: { JWT: [string] }
   */
+
 tblv.use((req, res, next) => {
   // setting response local variable with opened database connection
   res.locals.connection = redisClient;

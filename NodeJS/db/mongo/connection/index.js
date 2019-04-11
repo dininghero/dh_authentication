@@ -15,6 +15,7 @@ const options = {
 * @name terminate
 * @function
 */
+
 const terminate = () => {
   mongoose.connection
     .close(() => {
@@ -29,6 +30,7 @@ const terminate = () => {
   * @function
   * @param {requestCallback} cb - Callback that start node server when the connection is successful
   */
+
 exports.connect = (cb) => {
   mongoose.connection
     .on('connected', () => console.log(chalk.cyan(`* MongoDB is connected: ${dbURL}`)))

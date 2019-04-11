@@ -3,8 +3,7 @@ const atob = require('atob');
 
 /**
   * Decode base64UrlEncoded String to base64
-  * @function
-  * @constructor
+  * @class
   *
   * @method authenticateJWT - verifies that the token is valid and has not been altered
   * @param {String} JsonWebToken
@@ -94,7 +93,7 @@ exports.DecodeJsonWebToken = class decodeJWT {
   }
 };
 
-// Logic for express **************** decoding
+//Logic for express **************** decoding
 
 // const decodeToken = new decodeJsonWebToken();
 // if (decodeToken.authenticateJWT(JSONWebToken.base64UrlToken)) {

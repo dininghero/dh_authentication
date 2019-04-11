@@ -29,6 +29,7 @@ module.exports = {
       "daysInMonth",
       "generateRandomInclusive",
       "writeToFile",
+      "remove",
     ]
   }],
     "no-useless-escape": "off",

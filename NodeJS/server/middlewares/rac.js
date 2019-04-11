@@ -3,7 +3,7 @@ const express = require('express');
 const { createAccount } = require('../../db/mongo/models/index');
 const { verifyContent } = require('../utilities/verify');
 const { Crypto } = require('../utilities/crypto');
-const { ValidateAccountForms } = require('../utilities/validateAccountField');
+const { ValidateAccountField } = require('../utilities/validateAccountField');
 
 const rac = express.Router();
 
@@ -14,13 +14,14 @@ const rac = express.Router();
   * Headers: { Content-Type: application/json }
   * Data Params: { email: [string], pw: [string], firstname: [string], lastname: [string] }
   */
+
 rac.route('/rac').post((req, res) => {
   const {
     firstname, lastname, email, pw,
   } = req.body;
 
   /** Validating data before inserting into database */
-  const validation = new ValidateAccountForms();
+  const validation = new ValidateAccountField();
 
   validation.validateName(firstname, 'first');
   validation.validateName(lastname, 'last');

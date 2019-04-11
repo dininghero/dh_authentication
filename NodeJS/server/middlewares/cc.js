@@ -8,6 +8,7 @@ const cc = express.Router();
   * Headers: { Content-Type: application/json }
   * Data Params: {  }
   */
+
 cc.use((req, res, next) => {
   /** need to compare the header store csrf token and the one encrypted in the
   JWT body and see if they match */
@@ -15,7 +16,7 @@ cc.use((req, res, next) => {
     next();
   } else {
     /** Checks header and JWT payload for matching tokens  */
-    req.header.access_token === res.locals.xsrfToken ? next() : res.status(401).send({response: 'Unauthorized.'});
+    req.header.access_token === res.locals.xsrfToken ? next() : res.status(401).send({ response: 'Unauthorized' });
   }
 });
 

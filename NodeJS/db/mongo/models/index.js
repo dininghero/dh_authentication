@@ -12,6 +12,7 @@ const Account = require('../schema');
   * @param {String} user.salt - Salt value added to the password before hashing
   * @returns {Promise} Promise object success and failure
   */
+
 const createAccount = user => Account.create(user);
 
 /**
@@ -22,6 +23,7 @@ const createAccount = user => Account.create(user);
   * @param {String} loginData.email
   * @returns {Promise} Promise object represents query data
   */
+
 const loginAccount = loginData => new Promise((resolve, reject) => {
   if (loginData.email) {
     Account.find({ email: loginData.email }, (err, result) => {

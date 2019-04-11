@@ -9,6 +9,7 @@ const ralo = express.Router();
   * Headers: { Content-Type: application/json }
   * Data Params:
   */
+
 ralo.route('/ralo').post((req, res) => {
   res.status(200).send({
     response: 'Sucessful Log-out.',

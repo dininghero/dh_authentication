@@ -17,7 +17,7 @@
   * @return {Boolean}
   */
 
-exports.ValidateAccountForms = class ValidateAccountForms {
+exports.ValidateAccountField = class ValidateAccountField {
   constructor() {
     this.pw = false;
     this.firstName = false;

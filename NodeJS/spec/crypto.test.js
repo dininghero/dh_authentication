@@ -1,11 +1,11 @@
-const { _crypto } = require('../server/utilities/crypto');
+const { Crypto } = require('../server/utilities/crypto');
 
-const crypto = new _crypto();
+const crypto = new Crypto();
 
 /** new crypto() */
-describe('new _crypto()', () => {
+describe('new Crypto()', () => {
   test('should be a class', () => {
-    expect(new _crypto()).toBeInstanceOf(_crypto);
+    expect(new Crypto()).toBeInstanceOf(Crypto);
   });
 });
 

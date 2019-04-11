@@ -13,6 +13,7 @@ const ral = express.Router();
   * Headers: { Content-Type: application/json }
   * Data Params: { email: [string], pw: [string] }
   */
+
 ral.route('/ral').post((req, res) => {
   verifyPassword(req.body)
     .then((result) => {
