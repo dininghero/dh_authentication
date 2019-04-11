@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
+const chalk = require('chalk');
 
 // Mongo Connection
-const { connect } = require('../db/mongo/connections/index');
+const { connect } = require('../db/mongo/connection/index');
 
 const ral = require('./middlewares/ral');
 const rac = require('./middlewares/rac');
@@ -48,7 +49,7 @@ app.post('/test', (req, res) => {
 
 /* Creates connection to MongoDb and when connection is established, starts server */
 const listen = () => app.listen(port, () => {
-  console.log(`*** App listening on http://localhost:${port}/ ***`);
+  console.log(chalk.yellow(`* App listening on: http://localhost:${port}`));
 });
 
 connect(listen);

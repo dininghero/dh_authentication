@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const chalk = require('chalk');
 
 const dbURL = 'mongodb://localhost:27017/dininghero';
 
@@ -17,7 +18,7 @@ const options = {
 const terminate = () => {
   mongoose.connection
     .close(() => {
-      console.log('MongoDB disconnected on app termination');
+      console.log(chalk.cyan('* MongoDB disconnected on app termination'));
       process.exit(0);
     });
 };
@@ -30,13 +31,13 @@ const terminate = () => {
   */
 exports.connect = (cb) => {
   mongoose.connection
-    .on('connected', () => console.log(`MongoDB is connected: ${dbURL}`))
-    .on('error', err => console.log(`MongoDB error: ${err}`))
-    .on('disconnected', () => console.log('MongoDB is disconnected!'))
-    .on('reconnected', () => console.log(`MongoDB is reconnected: ${dbURL}`))
-    .on('reconnectFailed', () => console.log('MongoDB reconnected failed, run out of reconnectTries'))
-    .on('timeout', err => console.log(`MongoDB timeout: ${err}`))
-    .on('close', () => console.log('MongoDB connection closed'))
+    .on('connected', () => console.log(chalk.cyan(`* MongoDB is connected: ${dbURL}`)))
+    .on('error', err => console.log(chalk.red(`* MongoDB error: ${err}`)))
+    .on('disconnected', () => console.log(chalk.cyan('* MongoDB is disconnected!')))
+    .on('reconnected', () => console.log(chalk.cyan(`* MongoDB is reconnected: ${dbURL}`)))
+    .on('reconnectFailed', () => console.log(chalk.cyan('* MongoDB reconnected failed, run out of reconnectTries')))
+    .on('timeout', err => console.log(chalk.red(`* MongoDB timeout: ${err}`)))
+    .on('close', () => console.log(chalk.cyan('* MongoDB connection closed')))
     .once('open', cb);
 
   /**
