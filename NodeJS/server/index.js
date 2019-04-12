@@ -17,18 +17,32 @@ const cc = require('./middlewares/cc');
 const port = 3000;
 const app = express();
 
-const whitelist = ['http://localhost:3001', 'http://localhost:1000'];
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-};
+// const whitelist = ['http://localhost:3001', 'http://localhost:1000'];
+// const corsOptions = {
+//   origin: (origin, callback) => {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+
+// Enable CORS
+app.use((req, res, next) => {
+  /* Allowed connection */
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
+  /* Allowed methods */
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  /* Allowed headers */
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  /* Set to true if you need the website to include cookies in the requests
+    sent to the API (e.g. in case you use sessions) */
+  res.header('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 /* Parse application/x-www-form-urlencoded */
 app.use(express.urlencoded({ extended: false }));

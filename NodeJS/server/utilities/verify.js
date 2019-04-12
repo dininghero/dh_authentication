@@ -1,5 +1,5 @@
 const { loginAccount } = require('../../db/mongo/models');
-const { _crypto } = require('./crypto');
+const { Crypto } = require('./crypto');
 
 /**
   * Check if email is in the database
@@ -43,7 +43,7 @@ const verifyPassword = credentials => new Promise((resolve, reject) => {
       return account[0];
     })
     .then((result) => {
-      const decrypt = new _crypto(credentials.pw);
+      const decrypt = new Crypto(credentials.pw);
       // check if decrypt pw === pw
       resolve(decrypt.decryption(credentials.pw, result.salt) === result.pw);
     })

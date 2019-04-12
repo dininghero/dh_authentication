@@ -11,12 +11,3 @@
 exports.cache = (connection, key, value) => new Promise((resolve, reject) => {
   resolve(connection.set(key, value));
 });
-
-// exports.cache = (connection, key, value) => new Promise((resolve, reject) => {
-//   connection.set(key, value, (err, reply) => {
-//     if (err) {
-//       reject(new Error(err));
-//     }
-//     resolve(reply);
-//   });
-// });
