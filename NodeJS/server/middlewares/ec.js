@@ -15,7 +15,6 @@ ec.use((req, res, next) => {
     resolve(tokenStatus.validateExpiration(redisClient));
   })
     .then((next) => {
-      console.log(tokenStatus); // remove this
       tokenStatus.remove(redisClient, tokenStatus.tokens.expired);
     })
     .catch(err => console.log(err));
