@@ -33,7 +33,7 @@ const app = express();
 // Enable CORS
 app.use((req, res, next) => {
   /* Allowed connection */
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
+  res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:3001');
   /* Allowed methods */
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   /* Allowed headers */

@@ -28,7 +28,6 @@ tblv.use((req, res, next) => {
     // if user is logging out, black list token into db
     if (req.originalUrl.toLowerCase() === '/ralo') {
       /** Store JWT into redis on user log-out request */
-      console.log('ralo')
       cache(redisClient, req.body.JWT, req.body.JWT);
       next();
     } else {

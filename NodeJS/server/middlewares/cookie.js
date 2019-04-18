@@ -28,10 +28,10 @@ cookie.use((req, res, next) => {
 
     res.cookie('access_token', csrf_token, {
       expires: csrf.setExpiry(),
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 86400000, /* 24 hours */
-      secure: true,
-    });
+      // secure: true, // uncomment when portal is changed to HTTPS
+    }); 
 
     res.set('X-CSRF-TOKEN', csrf_token);
   }
@@ -40,6 +40,7 @@ cookie.use((req, res, next) => {
   if (req.originalUrl.toLowerCase() === '/ralo') {
     res.clearCookie('access-token');
   }
+  
   next();
 });
 
