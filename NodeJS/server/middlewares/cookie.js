@@ -38,7 +38,7 @@ cookie.use((req, res, next) => {
 
   /** handle user log out requests */
   if (req.originalUrl.toLowerCase() === '/ralo') {
-    res.clearCookie('access-token');
+    res.clearCookie('access_token');
   }
   
   next();
