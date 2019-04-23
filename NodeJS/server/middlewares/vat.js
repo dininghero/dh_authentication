@@ -17,7 +17,7 @@ const vat = express.Router();
 
 vat.use((req, res, next) => {
   // By JWT verification if a user is attempting to create an account or authenticate
-  if (req.originalUrl.toLowerCase() === '/ral' || req.originalUrl.toLowerCase() === '/rac') {
+  if (req.originalUrl.toLowerCase() === '/ral' || req.originalUrl.toLowerCase() === '/rac' || req.originalUrl.toLowerCase() === '/rupr') {
     next();
   } else {
     const decodeToken = new DecodeJsonWebToken();

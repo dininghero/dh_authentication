@@ -13,6 +13,7 @@ const ralo = require('./middlewares/ralo');
 const tblv = require('./middlewares/tblv');
 const ec = require('./middlewares/ec');
 const cc = require('./middlewares/cc');
+const rupr = require('./middlewares/rupr');
 
 const port = 3000;
 const app = express();
@@ -54,7 +55,7 @@ app.use(express.json());
 app.use('/', [cookie, tblv, ec, vat, cc]);
 
 /* Router-level middleware */
-app.use('/', [ral, rac, ralo]);
+app.use('/', [rupr, ral, rac, ralo]);
 
 /* route used execlusively for testing */
 app.post('/test', (req, res) => {

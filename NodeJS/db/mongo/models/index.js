@@ -35,7 +35,44 @@ const loginAccount = loginData => new Promise((resolve, reject) => {
   }
 });
 
+/** 
+ * @function
+ * @param {String} email
+ * @return {Promise} query data
+ */
+
+const findEmail = email => new Promise((resolve, reject) => {
+  if (email) {
+    Account.find({ email: email }, (err, result) => {
+      if (err) reject(new Error(err));
+      resolve(result);
+    })
+  } else {
+    reject(new Error('Error: email is required'));
+  }
+});
+
+/** 
+ * @function
+ * @param {String} email
+ * @param {Object} token - hashed password and salt values 
+ * @return {Promise} 
+ */
+
+const updatePassword = (email, token) => new Promise((resolve, reject) => {
+  if (token) {
+    Account.findOneAndUpdate({ email: email }, { $set: { pw: token.hash, salt: token.salt, tempPassword: true }}, (err, result) => {
+      if (err) reject(new Error(err));
+      resolve(result);
+    })
+  } else {
+    reject(new Error('Error: Incorrect Params'))
+  }
+})
+
 module.exports = {
   createAccount,
   loginAccount,
+  findEmail,
+  updatePassword,
 };

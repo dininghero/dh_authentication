@@ -22,6 +22,9 @@ const accountSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  tempPassword: {
+    type: Boolean,
+  }, 
   createdAt: {
     type: Date,
     default: Date.now,

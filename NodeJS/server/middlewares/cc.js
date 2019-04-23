@@ -16,7 +16,8 @@ cc.use((req, res, next) => {
     next();
   } else {
     /** Checks header and JWT payload for matching tokens  */
-    req.header.access_token === res.locals.xsrfToken ? next() : res.status(401).send({ response: 'Unauthorized' });
+    next() //remove after testing
+    // req.header.access_token === res.locals.xsrfToken ? next() : res.status(401).send({ response: 'Unauthorized' });
   }
 });
 
