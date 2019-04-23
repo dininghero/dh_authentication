@@ -59,16 +59,16 @@ const findEmail = email => new Promise((resolve, reject) => {
  * @return {Promise} 
  */
 
-const updatePassword = (email, token) => new Promise((resolve, reject) => {
+const updatePassword = (email, token, boolean) => new Promise((resolve, reject) => {
   if (token) {
-    Account.findOneAndUpdate({ email: email }, { $set: { pw: token.hash, salt: token.salt, tempPassword: true }}, (err, result) => {
+    Account.findOneAndUpdate({ email: email }, { $set: { pw: token.hash, salt: token.salt, tempPassword: boolean }}, (err, result) => {
       if (err) reject(new Error(err));
       resolve(result);
     })
   } else {
     reject(new Error('Error: Incorrect Params'))
   }
-})
+});
 
 module.exports = {
   createAccount,
