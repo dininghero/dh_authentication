@@ -22,7 +22,7 @@ rupr.route('/rupr').get((req, res) => {
       const encryptedPassword = new Crypto().encryption(randomPassword);
       
       console.log(randomPassword) // remove this
-      updatePassword(req.body.email, encryptedPassword).then(result => {
+      updatePassword(req.body.email, encryptedPassword, true).then(result => {
         sendEmail(req.body.email, randomPassword);
         res.status(200).send({
           response: 'Success'
