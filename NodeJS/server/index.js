@@ -14,6 +14,7 @@ const tblv = require('./middlewares/tblv');
 const ec = require('./middlewares/ec');
 const cc = require('./middlewares/cc');
 const rupr = require('./middlewares/rupr');
+const ctpw = require('./middlewares/ctpw');
 
 const port = 3000;
 const app = express();
@@ -52,7 +53,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 /* Cookie parser middleware */
-app.use('/', [cookie, tblv, ec, vat, cc]);
+app.use('/', [cookie, tblv, ec, vat, cc, ctpw]);
 
 /* Router-level middleware */
 app.use('/', [rupr, ral, rac, ralo]);
