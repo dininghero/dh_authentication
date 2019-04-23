@@ -31,9 +31,9 @@ tblv.use((req, res, next) => {
       cache(redisClient, req.body.JWT, req.body.JWT);
       next();
     } else {
-    // check redis to see if an JWT is blacklisted - if true, send 401 unauthorized
+      // check redis to see if an JWT is blacklisted - if true, send 401 unauthorized
       const result = query(redisClient, req.body.JWT)
-        .then((result) => {
+        .then(result => {
           result === null ? next() : res.status(401).send({ response: 'Unauthorized' });
         });
     }
